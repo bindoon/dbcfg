@@ -1,0 +1,5 @@
+{{extend ("./layout/default-layout") }}
+
+{{#block ("content") }}
+
+{{/block}}

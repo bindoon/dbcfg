@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{title}}</title>
+
+  </head>
+  <body>
+    <div id="container">
+    {{{block ("content") }}}
+    </div>
+  </body>
+
+  <script type="text/javascript" src="/assets/main.js"></script>
+</html>
