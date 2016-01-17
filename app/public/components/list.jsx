@@ -8,7 +8,7 @@ const columns = [{
   title: '姓名',
   dataIndex: 'name',
   render: function(text) {
-    return <a href="#">{text}</a>;
+    return (<a href="#">{text}</a>);
   }
 }, {
   title: '年龄',
@@ -29,7 +29,7 @@ const data = [{
   address: '西湖区湖底公园1号'
 }, {
   key: '3',
-  name: '李大嘴',
+  name: '李大d嘴',
   age: 32,
   address: '西湖区湖底公园1号'
 }];
@@ -47,9 +47,9 @@ const rowSelection = {
   }
 };
 
-export default class List extends React.Component {
+export default React.createClass( {
     render() {
-        return <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
+        return ( <Table rowSelection={rowSelection} columns={columns} dataSource={data} />)
     }
-}
+})
 

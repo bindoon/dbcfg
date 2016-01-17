@@ -1,47 +1,59 @@
-/*
- * Webpack development server configuration
- *
- * This file is set up for serving the webpack-dev-server, which will watch for changes and recompile as required if
- * the subfolder /webpack-dev-server/ is visited. Visiting the root will not automatically reload.
- */
-'use strict';
-var webpack = require('webpack');
+var path = require('path')
+var webpack = require('webpack')
 
 module.exports = {
-
-    output: {
-        path: "/assets",
-        filename: 'main.js',
-    },
-
-    devtool: 'sourcemap',
+    devtool: 'eval',
     entry: [
-        'webpack/hot/only-dev-server',
-        './app/public/components/main.jsx'
+        'webpack-hot-middleware/client',
+        './app/public/index'
+    ],
+    output: {
+        path: path.join(__dirname, 'dist'),
+        filename: 'bundle.js',
+        publicPath: '/static/'
+    },
+    plugins: [
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoErrorsPlugin(),
+        new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}}),
+        new webpack.DefinePlugin({
+            __DEBUG__: true,
+            __DEVELOPMENT__: true,
+            __DEVTOOLS__: true
+        })
     ],
     resolve: {
-        extensions: ['', '.js', '.jsx']
+        extensions: ['', '.js', '.jsx'],
     },
     module: {
         loaders: [{
-            test: /\.(js|jsx)$/,
-            exclude: /node_modules/,
-            loader: "babel",
-            query: {
-                presets:['es2015','react'],
-                plugins: ['add-module-exports'] //解决 export default的问题，多一个  module.exports = exports['default'];
-            }
+                test: /\.(js|jsx)$/,
+                loader: 'babel',
+                query: {
+                    plugins: ['react-transform'],
+                    extra: {
+                        'react-transform': {
+                            transforms: [{
+                                transform: 'react-transform-hmr',
+                                imports: ['react'],
+                                locals: ['module']
+                            }, {
+                                transform: 'react-transform-catch-errors',
+                                imports: ['react', 'redbox-react']
+                            }]
+                        }
+                    }
+                },
+                exclude: /node_modules/,
+                include: path.join(__dirname, 'app', 'public')
+
         }, {
             test: /\.less/,
-            loader: 'style-loader!css-loader!less-loader'
-        }, {
-            test: /\.css$/,
-            loader: 'style-loader!css-loader'
-        }]
-    },
-
-    plugins: [
-        new webpack.HotModuleReplacementPlugin()
-    ]
-
-};
+                loader: 'style!css!less'
+            }, {
+                test: /\.css$/,
+                loader: 'style!css'
+            }
+        ]
+    }
+}

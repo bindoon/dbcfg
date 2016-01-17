@@ -8,11 +8,10 @@ var config = require('config');
 var fs = require('fs');
 var extend = require('util')._extend;
 
-var webpackMiddleware = require("webpack-dev-middleware");
-var webpack = require("webpack");
-var webpackConfig = require('./webpack.config');
-
-var webpackCompiler = webpack(webpackConfig);
+var webpack = require('webpack')
+var webpackDevMiddleware = require('webpack-dev-middleware')
+var webpackHotMiddleware = require('webpack-hot-middleware')
+var webpackconfig = require('./webpack.config')
 
 // var db = require('./app/models');
 var Settings = config.global;
@@ -46,6 +45,10 @@ function midway(app) {
       next();
     });
 
+    var compiler = webpack(webpackconfig)
+    app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: webpackconfig.output.publicPath }))
+    app.use(webpackHotMiddleware(compiler))
+
     function addRouterFromFolder() {
         var folderPath =  path.join(__dirname, 'app/routes/');
 
@@ -70,17 +73,6 @@ function midway(app) {
         }
     }
     addRouterFromFolder();
-
-    app.use(webpackMiddleware(webpackCompiler, {
-      publicPath: '/assets/',
-      lazy: false,
-      watchOptions: {
-        aggregateTimeout: 300,
-        poll: true
-      },
-      noInfo: true
-    }));
-
 
 
     // catch 404 and forward to error handler
@@ -113,6 +105,9 @@ function midway(app) {
         error: {}
       });
     });
+
+
+
 
     return app;
 }
