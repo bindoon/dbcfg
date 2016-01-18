@@ -2,7 +2,7 @@
 
 var React = require('react');
 
-import { Table } from 'antd';
+import { Table } from '@ali/sui';
 
 const columns = [{
   title: '姓名',
@@ -49,7 +49,7 @@ const rowSelection = {
 
 export default React.createClass( {
     render() {
-        return ( <Table rowSelection={rowSelection} columns={columns} dataSource={data} />)
+        return ( <Table rowSelection={rowSelection} columns={columns} dataSource={data} bordered />)
     }
 })
 

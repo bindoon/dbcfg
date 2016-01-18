@@ -13,7 +13,7 @@ var webpackDevMiddleware = require('webpack-dev-middleware')
 var webpackHotMiddleware = require('webpack-hot-middleware')
 var webpackconfig = require('./webpack.config')
 
-// var db = require('./app/models');
+ var db = require('./app/models');
 var Settings = config.global;
 
 

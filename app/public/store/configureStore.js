@@ -1,6 +1,10 @@
 import { compose, createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
-import reducer from '../reducers'
+import { reduxReactRouter } from 'redux-router';
+import createHistory from 'history/lib/createHashHistory';
+
+import rootReducer from '../reducers'
+import routes from '../routes';
 
 
 
@@ -9,22 +13,29 @@ var buildStore
 if (__DEBUG__) {
     buildStore = compose(
         applyMiddleware(thunk),
+        reduxReactRouter({
+            routes,
+            createHistory
+        }),
         require('redux-devtools').devTools(),
         require('redux-devtools').persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
     )(createStore)
 } else {
-    buildStore = compose(applyMiddleware(thunk))(createStore)
+    buildStore = compose(applyMiddleware(thunk),
+        reduxReactRouter({
+            routes,
+            createHistory
+        }))(createStore)
 }
 
 
 export default function configureStore(initialState) {
-  const store = buildStore(reducer, initialState)
+  const store = buildStore(rootReducer, initialState)
 
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers
     module.hot.accept('../reducers', () => {
-      const nextReducer = require('../reducers')
-      store.replaceReducer(nextReducer)
+        store.replaceReducer(require('../reducers'))
     })
   }
 

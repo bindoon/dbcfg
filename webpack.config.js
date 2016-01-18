@@ -17,9 +17,7 @@ module.exports = {
         new webpack.NoErrorsPlugin(),
         new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}}),
         new webpack.DefinePlugin({
-            __DEBUG__: true,
-            __DEVELOPMENT__: true,
-            __DEVTOOLS__: true
+            __DEBUG__: JSON.stringify(JSON.parse(process.env.DEBUG || 'false'))
         })
     ],
     resolve: {

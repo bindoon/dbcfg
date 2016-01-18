@@ -3,28 +3,20 @@ import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { RouteHandler } from 'react-router'
-import { Col,Row } from 'antd';
 
 
-import Counter from '../components/Counter'
-import * as CounterActions from '../actions/counter'
+import List from '../components/list'
+import * as Actions from '../actions/index'
 
-import Sider from './sider'
 let App = React.createClass({
     render() {
         return (
-        <Row>
-                <Sider />
-            <Col span="18">
-                <Counter {...this.props}  />
-                </Col>
-        </Row>
+                <List {...this.props}  />
         )
     }
 })
 
 export default connect(state => ({
-    mycounter: state.counter
 }), dispatch =>({
-    action:bindActionCreators(CounterActions, dispatch)
+    action:bindActionCreators(Actions, dispatch)
 }))(App)

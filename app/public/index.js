@@ -1,23 +1,14 @@
 'use strict';
 
-import 'antd/lib/index.css'
+import '@ali/sui/style/index.less'
 
 import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
-
-import Root from './root'
+import { ReduxRouter } from 'redux-router'
 import configureStore from './store/configureStore'
 
 const store = configureStore()
-
-/*
-dispatch
-getState
-replaceReducer
-subscribe
- */
-
 
 function renderDevTools(store) {
     if (__DEBUG__) {
@@ -29,16 +20,16 @@ function renderDevTools(store) {
             </DebugPanel>
         )
     }
-
     return null
 }
 
 render(
     <div>
         <Provider store={store}>
-            <Root />
+            <ReduxRouter />
         </Provider>
         {renderDevTools(store)}
+
     </div>        ,
   document.getElementById('container')
 )
