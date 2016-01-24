@@ -57,7 +57,12 @@ export function getList() {
         reqwest({
             url:'/dbcfg',
             method:'post',
-            type:'json',
+            data: {
+                condition:'{}',
+                op:'query',
+                pagination:'{"totalItems":0,"currentPage":1,"totalPage":1}',
+                table: "indexdata"
+            },
             success: function(json) {
                 dispatch({
                     type:LIST_GET,

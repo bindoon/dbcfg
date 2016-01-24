@@ -30,7 +30,7 @@
     "webpack-hot-middleware": "2.0.0"
   },
   "dependencies": {
-    "@ali/sui": "0.0.2",
+    "@ali/sui": "^0.0.4",
     "body-parser": "^1.12.4",
     "bson": "^0.4.7",
     "co": "^4.5.4",
