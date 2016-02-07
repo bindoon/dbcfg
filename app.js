@@ -1,3 +1,5 @@
+'strict model';
+
 var express = require('express');
 var midway = require('./midway');
 global.Promise =  require('promise');

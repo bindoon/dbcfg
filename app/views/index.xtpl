@@ -2,4 +2,5 @@
 
 {{#block ("content") }}
 
+<script type="text/javascript" src="/static/bundle.js"></script>
 {{/block}}

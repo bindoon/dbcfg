@@ -1,25 +1,8 @@
-var mongoose = require('mongoose');
+"use strict";
 
+var dbHelper = require('./dbHelper');
+var Sequelize = require("sequelize");
 
-//var dbaddress = 'hanstyle:whoami@12345@127.0.0.1';
-//var dbaddress = '121.41.83.170';
-var dbaddress = '127.0.0.1';
-var dbName = 'hanstyle';
+var sequelize = dbHelper.createConnect({dbname:'dbcfg', username:'root', password:''});
 
-console.error('[mongodb] db address:%s',dbaddress);
-var dbAdress = 'mongodb://'+dbaddress+'/'+dbName;
-
-//mongoose.connect('mongodb://y87iut03d4:le44ldve04@mongo.labs.taobao.net:27017/n6wejl87xkquwnx7k9s0');
-mongoose.connect(dbAdress);
-var db = mongoose.connection;
-db.on('error', function(err){
-    console.error('[mongodb] connect to %s error: ',  err.message);
-    process.exit(1);
-});
-db.once('open', function () {
-   console.info('[mongodb] once open');
-});
-
-require('./mongoScheme');
-
-exports = db;
+module.exports = require('./define')(sequelize);

@@ -1,16 +1,39 @@
-import { LIST_GET } from '../constants/index'
+import { LIST_GET,SHOW_MSG } from '../constants/index'
+import { combineReducers } from 'redux'
 
 const initialState = {
     result : {columns:[],list:[],addNum:3},
+    msg:{}
 };
 
-export default function sider(state = initialState, action) {
+function result(state = initialState.result, action) {
     switch (action.type) {
         case LIST_GET:
-            return Object.assign({}, state, {
-                result: action.data.result
-            });
+            return Object.assign({}, state, action.data.result);
+            break;
+
         default:
             return state;
     }
 }
+
+function msg(state = initialState.msg, action) {
+    switch (action.type) {
+        case SHOW_MSG:
+            return {
+                mtype:action.mtype,
+                text:action.text
+            }
+            break;
+
+        default:
+            return state;
+    }
+}
+
+const list = combineReducers({
+    result,
+    msg,
+})
+
+export default list;

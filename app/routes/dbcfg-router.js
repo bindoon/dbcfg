@@ -1,3 +1,5 @@
+'strict model';
+
 var router = require('express').Router();
 
 var index = require('../controllers/dbcfg-controller');

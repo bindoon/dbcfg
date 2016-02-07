@@ -1,27 +1,11 @@
+'strict model';
+
 var co = require('co');
 var dbHelper = require('../models/dbHelper');
-var mongoose = require('mongoose');
 var jsonprc = require('../biz/jsonprc')
-var BSON = require('bson').BSONPure;
+var db = require('../models');
 
-//配置后台字段映射
-mongoose.model('dbcfg', new mongoose.Schema({
-    table: String,
-    column:String,
-    mapname: String,
-    ctype: {
-        type:Number,
-        default :1
-    },
-    config: {
-        value:[{
-            v:String,
-            n:String
-        }]
-    },
-    createTime:Date,
-    modifyTime:Date
-}));
+var mongoose = require('mongoose');
 
 function getKey(kv) {
     var keyMap = {};
@@ -118,21 +102,16 @@ function* updateColumnMap(tablename, columnlist) {
 }
 
 exports.dbcfg = function(req, res, next) {
-    var param = req.getParamObject();
+    var param = req.getParams();
 
-    if (!param.table||!param.op) {
-        res.send(jsonprc.error(-10,'param error'));
+    if (!param.id||!param.op) {
+        res.send(jsonprc.error('param error'));
         return;
     };
 
-    if (!(param.table in tableMap)) {
-        res.send(jsonprc.error(-101,'table not found'));
-        return;
+    var respone = {
+        success:true
     };
-
-    var usermodel = mongoose.model(param.table);
-
-    var respone = {};
 
     co(function* (){
         switch(param.op) {
@@ -140,14 +119,24 @@ exports.dbcfg = function(req, res, next) {
             {
                 var condition = param.condition? JSON.parse(param.condition):{};
                 var pagination = param.pagination? JSON.parse(param.pagination):{};
-                var columnMapArr = yield getColumnMap(mongoose.model('dbcfg'),param.table);
-                var columns = getColumnKV(usermodel.schema.paths,columnMapArr);
+
+                var ColumnCfg = yield dbHelper.findAll(db.ColumnCfg,{where:{tableid:param.id}});
+                var TableCfg = yield dbHelper.findOne(db.TableCfg,{where:{id:param.id}});
+                var DbCfg = yield  dbHelper.findOne(db.DbCfg,{where:{id:TableCfg.dbid}});
+
+
+                var dbconnect = dbHelper.createConnect(DbCfg.dataValues);   //获取db链接
+                var tbdefine = dbHelper.createDefine(dbconnect, TableCfg.tname, ColumnCfg) //定义table
+                var data = yield dbHelper.findAll(tbdefine,{where:condition});  //查询数据
 
                 respone.result = {
-                    columns: columns,
+                    columns: ColumnCfg,
                     condition: condition,
-                    pagination: pagination
+                    pagination: pagination,
+                    data: data
                 }
+
+                return respone;
 
                 var tdata =  yield queryData(usermodel,condition);
                 pagination.totalItems = tdata.length;

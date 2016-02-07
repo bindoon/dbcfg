@@ -1,30 +1,28 @@
 import React,{PropTypes} from 'react'
 import { connect } from 'react-redux'
 
-import { Tree, Icon , Col, Row, Menu, Breadcrumb } from '@ali/sui';
+import { Icon , Col, Row, Menu, Breadcrumb } from '@ali/sui';
 const SubMenu = Menu.SubMenu;
 
 import * as Actions from '../actions/index'
 
-const TreeNode = Tree.TreeNode;
-
-const Sider = React.createClass({
-    getInitialState() {
-        return {
+class Sider extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
             current: '1'
-        };
-    },
+        }
+    }
     componentDidMount() {
         const { dispatch } = this.props;
         dispatch(Actions.getSider());
-    },
+    }
     handleClick(e) {
         console.log('click ', e);
         this.setState({
             current: e.key
         });
-    },
-
+    }
     _renderMenu(item) {
 
         if (item.items && item.items.length) {
@@ -36,7 +34,7 @@ const Sider = React.createClass({
         } else {
             return <Menu.Item ><a href={item.link} >{item.title}</a></Menu.Item>
         }
-    },
+    }
     render() {
         return <div>
             <div className="header">
@@ -66,9 +64,7 @@ const Sider = React.createClass({
                                     <Breadcrumb.Item>某应用</Breadcrumb.Item>
                                 </Breadcrumb>
                             </div>
-
                             {this.props.children}
-
                         </div>
                     </Col>
                 </Row>
@@ -77,7 +73,7 @@ const Sider = React.createClass({
             </div>
         </div>;
     }
-});
+}
 
 Sider.propTypes = {
     router: PropTypes.object.isRequired,

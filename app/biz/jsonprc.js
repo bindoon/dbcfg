@@ -1,8 +1,6 @@
-exports.error = function (code,msg) {
+exports.error = function (msg) {
     return {
-        error:{
-            code:code,
-            msg:msg
-        }
+            success: false,
+            message: msg
     }
 }

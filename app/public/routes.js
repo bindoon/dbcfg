@@ -2,11 +2,11 @@ import React from 'react'
 import {Router, Route,IndexRoute, NotFoundRoute} from 'react-router'
 
 
-import Container from './containers/index';
+import Layout from './containers/layout';
 import App from './containers/App'
 
 const routes = (
-    <Router path="/" component={Container}>
+    <Router path="/" component={Layout}>
         <IndexRoute component={App}/>
 
     </Router>

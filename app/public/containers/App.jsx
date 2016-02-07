@@ -8,21 +8,27 @@ import { RouteHandler } from 'react-router'
 import List from '../components/list'
 import * as Actions from '../actions/index'
 
-import {Input} from '@ali/sui'
+import {Input,message} from '@ali/sui'
 
-let App = React.createClass({
+class App extends React.Component {
 
     componentDidMount() {
         const { dispatch } = this.props;
         dispatch(Actions.getList());
-    },
+    }
+
+    componentDidUpdate(){
+        if(this.props.list.msg.mtype) {
+            message.success(this.props.list.msg.text);
+        }
+    }
     _columns (columns) {
         let arr = [];
         columns.forEach((item,idx) => {
             arr.push({title:item.mapname,dataIndex:item.name})
         })
         return arr;
-    },
+    }
     _pagination(pagination) {
         return pagination? {
             total:pagination.totalItems,
@@ -34,17 +40,29 @@ let App = React.createClass({
                 console.log('Current: ', current);
             }
         }:{}
-    },
-
-    render() {
-        var {columns,list, pagination, ...others} = this.props.result;
-
-        return (
-                <List {...others} dataSource={list} columns={this._columns(columns)} pagination={this._pagination(pagination)} />
-        )
     }
-})
+    onAdd(list) {
+        const { dispatch } = this.props;
+        dispatch(Actions.addList(list));
+    }
+    onUpdate(list) {
+        const { dispatch } = this.props;
+        dispatch(Actions.updateList(list));
+    }
+    onDelete(list) {
+        const { dispatch } = this.props;
+        dispatch(Actions.deleteList(list));
+    }
+    onSearch(condition) {
+        const { dispatch } = this.props;
+        dispatch(Actions.getList(condition));
+    }
+    render() {
+        let {columns,data, pagination, ...others} = this.props.list.result;
+        return  <List {...others} dataSource={data} columns={this._columns(columns)} pagination={this._pagination(pagination)} onAdd={this.onAdd.bind(this)} onUpdate={this.onUpdate.bind(this)} onSearch={this.onSearch.bind(this)} onDelete={this.onDelete.bind(this)}/>
+    }
+}
 
 export default connect(state => ({
-    result: state.list.result
+    list: state.list,
 }))(App)

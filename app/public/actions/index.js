@@ -1,40 +1,5 @@
-import {INCREMENT_COUNTER,DECREMENT_COUNTER,SIDER_GET,LIST_GET} from '../constants/index'
+import * as types from '../constants/index'
 import reqwest from 'reqwest'
-
-export function increment() {
-  return {
-    type: INCREMENT_COUNTER
-  }
-}
-
-export function decrement() {
-  return {
-    type: DECREMENT_COUNTER
-  }
-}
-
-export function incrementIfOdd() {
-    return (dispatch, getState) => {
-        const { counter } = getState()
-
-        if (counter % 2 === 0) {
-            return
-        }
-        dispatch({
-            type:INCREMENT_COUNTER
-        })
-    }
-}
-
-export function incrementAsync(delay = 1000) {
-    return dispatch => {
-        setTimeout(() => {
-            dispatch({
-                type:INCREMENT_COUNTER
-            })
-        }, delay)
-    }
-}
 
 export function getSider() {
     return dispatch => {
@@ -43,7 +8,7 @@ export function getSider() {
             type:'json',
             success: function(json) {
                 dispatch({
-                    type:SIDER_GET,
+                    type:types.SIDER_GET,
                     data:json
                 })
             }
@@ -51,23 +16,103 @@ export function getSider() {
     }
 }
 
-
-export function getList() {
+export function getList(condition={}) {
     return dispatch => {
         reqwest({
             url:'/dbcfg',
             method:'post',
             data: {
-                condition:'{}',
                 op:'query',
+                condition:JSON.stringify(condition),
                 pagination:'{"totalItems":0,"currentPage":1,"totalPage":1}',
+                id: "1"
+            },
+            success: function(json) {
+                dispatch({
+                    type:types.LIST_GET,
+                    data:json
+                })
+            }
+        })
+    }
+}
+
+export function updateList(list) {
+    return dispatch => {
+        reqwest({
+            url:'dbcfg',
+            method:'post',
+            data: {
+                op:'update',
+                list:JSON.stringify(list),
+                table: "indexdata"
+            },
+            success: function(json) {
+                if(json.result.code==0) {
+                    dispatch({
+                        type:types.SHOW_MSG,
+                        mtype:'success',
+                        text:'更新成功'
+                    })
+                }else {
+                    dispatch({
+                        type:types.SHOW_MSG,
+                        mtype:'error',
+                        text:json.result.msg
+                    })
+                }
+            }
+        })
+    }
+}
+
+export function deleteList(list) {
+    return dispatch => {
+        reqwest({
+            url:'dbcfg',
+            method:'post',
+            data: {
+                op:'delete',
+                list:JSON.stringify(list),
+                table: "indexdata"
+            },
+            success: function(json) {
+                if(json.success) {
+                    dispatch({
+                        type:types.SHOW_MSG,
+                        mtype:'success',
+                        text:'操作成功'
+                    })
+                    dispatch(getList())
+                }else {
+                    dispatch({
+                        type:types.SHOW_MSG,
+                        mtype:'error',
+                        text:json.result.msg
+                    })
+                }
+            }
+        })
+    }
+}
+
+
+export function addList(list) {
+    return dispatch => {
+        reqwest({
+            url:'/dbcfg',
+            method:'post',
+            data: {
+                op:'insert',
+                list:JSON.stringify(list),
                 table: "indexdata"
             },
             success: function(json) {
                 dispatch({
-                    type:LIST_GET,
+                    type:types.LIST_GET,
                     data:json
                 })
+                dispatch(getList())
             }
         })
     }
