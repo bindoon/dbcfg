@@ -11,10 +11,18 @@ import * as Actions from '../actions/index'
 import {Input,message} from '@ali/sui'
 
 class App extends React.Component {
-
+    constructor() {
+        super(...arguments);
+        let condition = Object.assign({},this.props.location.query);
+        this.state = {
+            condition
+        }
+    }
     componentDidMount() {
         const { dispatch } = this.props;
-        dispatch(Actions.getList());
+        Actions.setId(this.props.params.id);
+        dispatch(Actions.getData({condition:this.state.condition}));
+
     }
 
     componentDidUpdate(){
@@ -22,10 +30,25 @@ class App extends React.Component {
             message.success(this.props.list.msg.text);
         }
     }
+    componentWillReceiveProps (next) {
+
+        if(next.params.id != this.props.params.id || next.location.query!=this.props.location.query) {
+            const { dispatch } = this.props;
+            if(next.params.id != this.props.params.id) {
+                Actions.setId(next.params.id);
+            }
+            if(next.location.query!=this.props.location.query) {
+                this.setState({
+                    condition:next.location.query
+                })
+            }
+            dispatch(Actions.getData({condition:next.location.query}));
+        }
+    }
     _columns (columns) {
         let arr = [];
         columns.forEach((item,idx) => {
-            arr.push({title:item.mapname,dataIndex:item.name})
+            arr.push({title:item.title,dataIndex:item.cname})
         })
         return arr;
     }
@@ -39,29 +62,30 @@ class App extends React.Component {
             onChange: function(current) {
                 console.log('Current: ', current);
             }
-        }:{}
+        }:{};
     }
-    onAdd(list) {
+    onAdd(data) {
         const { dispatch } = this.props;
-        dispatch(Actions.addList(list));
+        dispatch(Actions.addData(data));
     }
-    onUpdate(list) {
+    onUpdate(data) {
         const { dispatch } = this.props;
-        dispatch(Actions.updateList(list));
+        dispatch(Actions.updateData(data));
     }
-    onDelete(list) {
+    onDelete(data) {
         const { dispatch } = this.props;
-        dispatch(Actions.deleteList(list));
+        dispatch(Actions.deleteData(data));
     }
     onSearch(condition) {
         const { dispatch } = this.props;
-        dispatch(Actions.getList(condition));
+        dispatch(Actions.getData({condition:Object.assign({},this.state.condition,condition)}));
     }
     render() {
         let {columns,data, pagination, ...others} = this.props.list.result;
-        return  <List {...others} dataSource={data} columns={this._columns(columns)} pagination={this._pagination(pagination)} onAdd={this.onAdd.bind(this)} onUpdate={this.onUpdate.bind(this)} onSearch={this.onSearch.bind(this)} onDelete={this.onDelete.bind(this)}/>
+        return  <List {...others} dataSource={data} columns={this._columns(columns)} rowKey={(record)=>{return record.id}} pagination={this._pagination(pagination)} onAdd={this.onAdd.bind(this)} onUpdate={this.onUpdate.bind(this)} onSearch={this.onSearch.bind(this)} onDelete={this.onDelete.bind(this)}/>
     }
 }
+
 
 export default connect(state => ({
     list: state.list,

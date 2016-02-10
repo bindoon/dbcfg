@@ -8,7 +8,7 @@ import App from './containers/App'
 const routes = (
     <Router path="/" component={Layout}>
         <IndexRoute component={App}/>
-
+        <Route path="/list/:id" component={App} />
     </Router>
 );
 

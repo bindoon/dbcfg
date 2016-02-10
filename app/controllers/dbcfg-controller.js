@@ -4,7 +4,7 @@ var co = require('co');
 var dbHelper = require('../models/dbHelper');
 var jsonprc = require('../biz/jsonprc')
 var db = require('../models');
-
+var dbStore = require('../biz/dbStore')
 var mongoose = require('mongoose');
 
 function getKey(kv) {
@@ -66,13 +66,6 @@ function* queryData(usermodel,condition, options) {
     return  yield dbHelper.query(usermodel, condition, options);
 }
 
-function* insertData(usermodel,list) {
-    for (var i = 0; i < list.length; i++) {
-        yield dbHelper.insert(usermodel, list[i]);
-    };
-    return  0;
-}
-
 function* updateData(usermodel,list) {
     for (var i = 0; i < list.length; i++) {
         var obj_id = BSON.ObjectID.createFromHexString(list[i]._id);
@@ -93,12 +86,22 @@ function* getColumnMap(usermodel, tablename) {
     return yield dbHelper.query(usermodel,{table:tablename});
 }
 
-function* updateColumnMap(tablename, columnlist) {
-    var usermodel = mongoose.model('dbcfg');
-    for(var i =0; i < columnlist.length; i++) {
-        columnlist[i].config = columnlist[i].config? JSON.parse(columnlist[i].config):{};
-        yield dbHelper.findOneAndUpdate(usermodel,{table:tablename,column:columnlist[i].column}, columnlist[i], {upsert:true});
+function* getTable(id,ColumnCfg) {
+    ColumnCfg = ColumnCfg || (yield dbHelper.findAll(db.ColCfg,{where:{tbid:id}}));
+    var TbCfg = yield dbHelper.findOne(db.TbCfg,{where:{id:id}});
+
+    var dbconnect;
+    if(TbCfg.dbid in dbStore.dbStore) {
+        dbconnect = dbStore.dbStore[DbCfg.id];
     }
+    else {
+        var DbCfg = yield  dbHelper.findOne(db.DbCfg,{where:{id:TbCfg.dbid}});
+
+        dbconnect = dbHelper.createConnect(DbCfg.dataValues);   //获取db链接
+        dbStore.dbStore[DbCfg.id] = dbconnect;
+    }
+
+    return dbHelper.createDefine(dbconnect, TbCfg.tname, ColumnCfg) //定义table
 }
 
 exports.dbcfg = function(req, res, next) {
@@ -120,13 +123,9 @@ exports.dbcfg = function(req, res, next) {
                 var condition = param.condition? JSON.parse(param.condition):{};
                 var pagination = param.pagination? JSON.parse(param.pagination):{};
 
-                var ColumnCfg = yield dbHelper.findAll(db.ColumnCfg,{where:{tableid:param.id}});
-                var TableCfg = yield dbHelper.findOne(db.TableCfg,{where:{id:param.id}});
-                var DbCfg = yield  dbHelper.findOne(db.DbCfg,{where:{id:TableCfg.dbid}});
 
-
-                var dbconnect = dbHelper.createConnect(DbCfg.dataValues);   //获取db链接
-                var tbdefine = dbHelper.createDefine(dbconnect, TableCfg.tname, ColumnCfg) //定义table
+                var ColumnCfg = yield dbHelper.findAll(db.ColCfg,{where:{tbid:param.id}});
+                var tbdefine = yield getTable(param.id,ColumnCfg);
                 var data = yield dbHelper.findAll(tbdefine,{where:condition});  //查询数据
 
                 respone.result = {
@@ -136,29 +135,20 @@ exports.dbcfg = function(req, res, next) {
                     data: data
                 }
 
-                return respone;
-
-                var tdata =  yield queryData(usermodel,condition);
-                pagination.totalItems = tdata.length;
-                pagination.totalPage = parseInt((tdata.length+20)/20);
-                pagination.itemsPerPage = 20;
-
-
-                //var data = yield queryData(usermodel,condition,{skip:(pagination.currentPage-1)*20,limit:20});
-                var data = tdata.slice((pagination.currentPage-1)*20,(pagination.currentPage-1)*20+20);
-
                 if (data.length >= 0) {
-                    respone.result.list = data;
                     return respone;
                 } else {
-                    return jsonprc.error(-102,'query error');
+                    return jsonprc.error('query error');
                 }
                 break;
             }
             case 'insert':
             {
-                var list = param.list? JSON.parse(param.list):[];
-                yield insertData(usermodel,list);
+                var data = param.data? JSON.parse(param.data):[];
+                var tbdefine = yield getTable(param.id,ColumnCfg);
+                for (var i = 0; i < data.length; i++) {
+                    yield dbHelper.insert(tbdefine, data[i]);
+                };
                 respone.result = {
                     code: 0,
                     msg: '添加成功'
@@ -168,8 +158,11 @@ exports.dbcfg = function(req, res, next) {
             }
             case 'update':
             {
-                var list = param.list? JSON.parse(param.list):[];
-                yield updateData(usermodel,list);
+                var data = param.data? JSON.parse(param.data):[];
+                var tbdefine = yield getTable(param.id,ColumnCfg);
+                for (var i = 0; i < data.length; i++) {
+                    yield dbHelper.upsert(tbdefine, data[i]);
+                };
                 respone.result = {
                     code: 0,
                     msg: '更新成功'
@@ -184,17 +177,6 @@ exports.dbcfg = function(req, res, next) {
                 respone.result = {
                     code: 0,
                     msg: '删除成功'
-                }
-                return respone;
-                break;
-            }
-            case 'dbcfg':
-            {
-                var list = param.list? JSON.parse(param.list):[];
-                yield updateColumnMap(param.table,list);
-                respone.result = {
-                    code: 0,
-                    msg: '配置成功'
                 }
                 return respone;
                 break;

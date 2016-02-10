@@ -10,10 +10,10 @@ var config = require('config');
 var fs = require('fs');
 var extend = require('util')._extend;
 
-var webpack = require('webpack')
-var webpackDevMiddleware = require('webpack-dev-middleware')
-var webpackHotMiddleware = require('webpack-hot-middleware')
-var webpackconfig = require('./webpack.config')
+//var webpack = require('webpack')
+//var webpackDevMiddleware = require('webpack-dev-middleware')
+//var webpackHotMiddleware = require('webpack-hot-middleware')
+//var webpackconfig = require('./webpack.config')
 
 var db = require('./app/models');
 var Settings = config.global;
@@ -47,9 +47,9 @@ function midway(app) {
       next();
     });
 
-    var compiler = webpack(webpackconfig)
-    app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: webpackconfig.output.publicPath }))
-    app.use(webpackHotMiddleware(compiler))
+    //var compiler = webpack(webpackconfig)
+    //app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: webpackconfig.output.publicPath }))
+    //app.use(webpackHotMiddleware(compiler))
 
     function addRouterFromFolder() {
         var folderPath =  path.join(__dirname, 'app/routes/');

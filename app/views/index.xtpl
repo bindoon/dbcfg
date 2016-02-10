@@ -2,5 +2,5 @@
 
 {{#block ("content") }}
 
-<script type="text/javascript" src="/static/bundle.js"></script>
+<script type="text/javascript" src="http://localhost:8081/static/bundle.js"></script>
 {{/block}}

@@ -6,20 +6,7 @@ var BSON = require('bson').BSONPure;
 
 var util = require('util');
 
-
-
-//配置后台字段映射
-mongoose.model('menu', new mongoose.Schema({
-    id: String,
-    title: String,
-    link: String,
-    target: Number,
-    parentid: String,
-    order: Number,
-    createTime: Date,
-    modifyTime: Date
-}));
-var Menu = mongoose.model('menu');
+var Menu = require('../models').Menu;
 
 
 
@@ -27,7 +14,7 @@ function createTree(list) {
     var map = {};
     for (var i = 0; i < list.length; i++) {
 
-        var item = util._extend({}, list[i]._doc); //不这么改，扩展不了。不知道是怎么做到的约束
+        var item = Object.assign({}, list[i].dataValues); //不这么改，扩展不了。不知道是怎么做到的约束
         item.items = [];
         map[item.id] = item;
     };
@@ -49,7 +36,7 @@ function createTree(list) {
 
 exports.menu = function(req, res, next) {
     co(function*() {
-        var list = yield dbHelper.query(Menu, {});
+        var list = yield dbHelper.findAll(Menu, {});
         return createTree(list);
     }).then(function(data) {
         res.send({
@@ -125,7 +112,7 @@ exports.menucfg = function(req, res, next) {
         })
     } else {
         co(function*() {
-            var list = yield dbHelper.query(Menu, {});
+            var list = yield dbHelper.findAll(Menu, {});
             return createTree(list);
         }).then(function(data) {
             res.send({

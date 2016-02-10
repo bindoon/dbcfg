@@ -1,6 +1,14 @@
 import * as types from '../constants/index'
 import reqwest from 'reqwest'
 
+let id = 1;
+
+export function setId(nid) {
+    id=nid;
+}
+
+let apiurl = 'http://127.0.0.1:3333/dbcfg';
+
 export function getSider() {
     return dispatch => {
         reqwest({
@@ -16,16 +24,16 @@ export function getSider() {
     }
 }
 
-export function getList(condition={}) {
+export function getData(op={}) {
     return dispatch => {
         reqwest({
-            url:'/dbcfg',
+            url:apiurl,
             method:'post',
             data: {
                 op:'query',
-                condition:JSON.stringify(condition),
-                pagination:'{"totalItems":0,"currentPage":1,"totalPage":1}',
-                id: "1"
+                condition:op.condition? JSON.stringify(op.condition):'',
+                pagination:op.pagination? JSON.stringify(op.pagination):'',
+                id: id
             },
             success: function(json) {
                 dispatch({
@@ -37,15 +45,15 @@ export function getList(condition={}) {
     }
 }
 
-export function updateList(list) {
+export function updateData(data) {
     return dispatch => {
         reqwest({
-            url:'dbcfg',
+            url:apiurl,
             method:'post',
             data: {
                 op:'update',
-                list:JSON.stringify(list),
-                table: "indexdata"
+                data:JSON.stringify(data),
+                id: id
             },
             success: function(json) {
                 if(json.result.code==0) {
@@ -66,15 +74,15 @@ export function updateList(list) {
     }
 }
 
-export function deleteList(list) {
+export function deleteData(data) {
     return dispatch => {
         reqwest({
-            url:'dbcfg',
+            url:apiurl,
             method:'post',
             data: {
                 op:'delete',
-                list:JSON.stringify(list),
-                table: "indexdata"
+                data:JSON.stringify(data),
+                id: id
             },
             success: function(json) {
                 if(json.success) {
@@ -83,7 +91,7 @@ export function deleteList(list) {
                         mtype:'success',
                         text:'操作成功'
                     })
-                    dispatch(getList())
+                    dispatch(getData())
                 }else {
                     dispatch({
                         type:types.SHOW_MSG,
@@ -97,22 +105,31 @@ export function deleteList(list) {
 }
 
 
-export function addList(list) {
+export function addData(data) {
     return dispatch => {
         reqwest({
-            url:'/dbcfg',
+            url:apiurl,
             method:'post',
             data: {
                 op:'insert',
-                list:JSON.stringify(list),
-                table: "indexdata"
+                data:JSON.stringify(data),
+                id: id
             },
             success: function(json) {
-                dispatch({
-                    type:types.LIST_GET,
-                    data:json
-                })
-                dispatch(getList())
+                if(json.success) {
+                    dispatch({
+                        type:types.SHOW_MSG,
+                        mtype:'success',
+                        text:'操作成功'
+                    })
+                    dispatch(getData())
+                }else {
+                    dispatch({
+                        type:types.SHOW_MSG,
+                        mtype:'error',
+                        text:json.result.msg
+                    })
+                }
             }
         })
     }

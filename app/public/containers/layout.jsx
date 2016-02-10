@@ -32,7 +32,7 @@ class Sider extends React.Component {
                 })}
             </SubMenu>
         } else {
-            return <Menu.Item ><a href={item.link} >{item.title}</a></Menu.Item>
+            return <Menu.Item key={item.id} ><a href={item.link} >{item.title}</a></Menu.Item>
         }
     }
     render() {

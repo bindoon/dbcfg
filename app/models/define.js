@@ -27,7 +27,7 @@ module.exports = function (sequelize) {
             allowNull: false
         },
         port: {
-            type: Sequelize.INTEGER(11),
+            type: Sequelize.STRING,
             allowNull: true
         },
         dbname: {
@@ -36,23 +36,7 @@ module.exports = function (sequelize) {
         },
     });
 
-    //var DbCfg = sequelize.define('t_dbcfg', {
-    //        id: {
-    //            type: Sequelize.INTEGER(11).UNSIGNED,
-    //            allowNull: false,
-    //            primaryKey: true,
-    //            autoIncrement: true
-    //        },
-    //            type:  Sequelize.INTEGER(11),
-    //    host: Sequelize.STRING,
-    //    username:  Sequelize.STRING,
-    //    password: Sequelize.STRING,
-    //    port: Sequelize.INTEGER(11),
-    //    dbname:  Sequelize.STRING,
-    //});
-    //Dbcfg.__factory = {autoIncrementField: 'id'}
-
-    var TableCfg = dbHelper.createDefine(sequelize,'t_tablecfg', {
+    var TbCfg = dbHelper.createDefine(sequelize,'t_tbcfg', {
         id: {
             type: Sequelize.INTEGER(11).UNSIGNED,
             allowNull: false,
@@ -60,7 +44,7 @@ module.exports = function (sequelize) {
             autoIncrement: true
         },
         dbid: {
-            type: Sequelize.INTEGER(11),
+            type: Sequelize.STRING,
             allowNull: false
         },
         tname: {
@@ -69,15 +53,15 @@ module.exports = function (sequelize) {
         }
     });
 
-    var ColumnCfg = dbHelper.createDefine(sequelize,'t_columncfg', {
+    var ColCfg = dbHelper.createDefine(sequelize,'t_colcfg', {
         id: {
             type: Sequelize.INTEGER(11).UNSIGNED,
             allowNull: false,
             primaryKey: true,
             autoIncrement: true
         },
-        tableid: {
-            type: Sequelize.INTEGER(11),
+        tbid: {
+            type: Sequelize.STRING,
             allowNull: false
         },
         cname: {
@@ -89,17 +73,46 @@ module.exports = function (sequelize) {
             allowNull: false
         },
         type: {
-            type: Sequelize.INTEGER(11),
+            type: Sequelize.STRING,
             allowNull: false
         },
         cfg: Sequelize.TEXT
     });
 
+    var Menu = dbHelper.createDefine(sequelize,'t_menu', {
+        id: {
+            type: Sequelize.INTEGER(11).UNSIGNED,
+            allowNull: false,
+            primaryKey: true,
+            autoIncrement: true
+        },
+        title: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        link: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        target: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        parentid: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
+        corder: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        }
+    })
+
     return {
         DbCfg : DbCfg,
-        TableCfg : TableCfg,
-        ColumnCfg : ColumnCfg,
-        sequelize:sequelize
+        TbCfg : TbCfg,
+        ColCfg : ColCfg,
+        Menu: Menu
     }
 
 }

@@ -46,7 +46,6 @@ class List extends React.Component {
         })
         return newColumns;
     }
-
     _initAddColumn (columns, num) {
         var additem = {};
         columns.forEach(item=>{
@@ -56,7 +55,6 @@ class List extends React.Component {
         for(let i=0;i<num;i++) {
             addlist.push(Object.assign({},additem));
         }
-
         return addlist;
     }
     _searchOnChange(dataIndex,e) {
@@ -72,7 +70,6 @@ class List extends React.Component {
             condition
         })
     }
-
     onSearch(){
         this.setState({
             loading: true
@@ -101,6 +98,7 @@ class List extends React.Component {
                 //去除没有数据的
                 if(this.state.newList[i][item]) {
                     list.push( this.state.newList[i]);
+                    break;
                 }
             }
         })
@@ -129,7 +127,7 @@ class List extends React.Component {
         }
     }
     render() {
-        let {columns,pagination,addNum} = this.props;
+        let {columns,pagination,addNum,rowKey} = this.props;
         let condition = this.state.condition;
 
         const rowSelection = {
@@ -152,7 +150,7 @@ class List extends React.Component {
                 <Form inline>
                     <div>
                     {columns.map((item)=>{
-                        return   (<FormItem
+                        return   (<FormItem key={item.dataIndex}
                         label={item.title}>
                         <Input placeholder="请输入搜索名称" value={condition[item.dataIndex]} onChange={this._searchOnChange.bind(this,item.dataIndex)}/>
                         </FormItem>)
@@ -170,7 +168,7 @@ class List extends React.Component {
                     <Button type="link" onClick={this.onDelete.bind(this)}>批量删除</Button>
                 </div>
 
-                <Table  rowSelection={rowSelection} columns={this.listColumns(columns)} dataSource={this.state.list} loading={this.state.loading} bordered striped />
+                <Table  rowSelection={rowSelection} columns={this.listColumns(columns)} rowKey={rowKey} dataSource={this.state.list} loading={this.state.loading} bordered striped />
 
                 <div >
                     <Button type="link" onClick={this.onAddColumn.bind(this)}>新增数据</Button>

@@ -2,7 +2,7 @@ import { LIST_GET,SHOW_MSG } from '../constants/index'
 import { combineReducers } from 'redux'
 
 const initialState = {
-    result : {columns:[],list:[],addNum:3},
+    result : {columns:[],data:[],addNum:3},
     msg:{}
 };
 
