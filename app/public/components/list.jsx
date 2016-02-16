@@ -2,9 +2,10 @@
 
 var React = require('react');
 
-import {Input,Form, Row, Col,Table,Button,Modal } from '@ali/sui'
+import {Input,Form, Row, Col,Table,Button,Modal,Select,Checkbox } from '@ali/sui'
 const FormItem = Form.Item;
 const confirm = Modal.confirm;
+const Option = Select.Option;
 
 class List extends React.Component {
     constructor(props) {
@@ -32,16 +33,49 @@ class List extends React.Component {
             addNewSelectedRowKeys
         });
     }
+    onChange(item,record,e) {
+        record[item.dataIndex]=e.target.value;
+        let state = Object.assign({},this.state);
+        this.setState(state)
+    }
+    handleSelectChange(item,record,value) {
+        record[item.dataIndex]=value;
+        let state = Object.assign({},this.state);
+        this.setState(state)
+    }
     listColumns(columns) {
         var newColumns = Object.assign([],columns);
 
         newColumns.forEach((item)=>{
             item.render=(value,record,idx)=>{
-                return <Input value={value} onChange={(e)=>{
-                    record[item.dataIndex]=e.target.value;
-                    let state = Object.assign({},this.state);
-                    this.setState(state)
-                }} ></Input>;
+                /* 1: input 2:select 3:textarea 4:图片 5:url 6:label 7:checkbox 8:datepicker 9:自增id 10:隐藏 */
+
+                let container = <Input value={value} onChange={this.onChange.bind(this,item,record)} ></Input>;
+                switch (item.type) {
+                    case 2: //select
+                    {
+                        let options = item.cfg? JSON.parse(item.cfg):[];
+                        container = <Select value={value} onChange={this.handleSelectChange.bind(this,item,record)} style={{ width: 100 }}>
+                            { options.map( (v)=>{
+                                return <Option value={v[0]}>{v[1]}</Option>
+                            }) }
+                        </Select>;
+                    }
+                        break;
+                    case 3:
+                        container = <Input type="textarea" value={value} onChange={this.onChange.bind(this,item,record)} />
+                        break;
+                    case 6:
+                        container = <label>{value}</label>
+                        break;
+                    case 7:
+                        container = <Checkbox />
+                        break;
+                    case 8:
+                        break;
+
+                }
+                return container;
             }
         })
         return newColumns;
@@ -107,7 +141,7 @@ class List extends React.Component {
     }
     onUpdate(){
         let list = this.state.selectedRowKeys.map((i)=>{
-            return this.props.dataSource[i];
+            return this.state.list[i];
         })
         this.props.onUpdate && this.props.onUpdate(list);
     }
@@ -168,7 +202,7 @@ class List extends React.Component {
                     <Button type="link" onClick={this.onDelete.bind(this)}>批量删除</Button>
                 </div>
 
-                <Table  rowSelection={rowSelection} columns={this.listColumns(columns)} rowKey={rowKey} dataSource={this.state.list} loading={this.state.loading} bordered striped />
+                <Table  rowSelection={rowSelection} columns={this.listColumns(columns)}  dataSource={this.state.list} loading={this.state.loading} bordered striped />
 
                 <div >
                     <Button type="link" onClick={this.onAddColumn.bind(this)}>新增数据</Button>

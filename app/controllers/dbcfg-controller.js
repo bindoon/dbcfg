@@ -116,15 +116,16 @@ exports.dbcfg = function(req, res, next) {
         success:true
     };
 
+
     co(function* (){
+        var ColumnCfg = yield dbHelper.findAll(db.ColCfg,{where:{tbid:param.id}});
+
         switch(param.op) {
             case 'query':
             {
                 var condition = param.condition? JSON.parse(param.condition):{};
                 var pagination = param.pagination? JSON.parse(param.pagination):{};
 
-
-                var ColumnCfg = yield dbHelper.findAll(db.ColCfg,{where:{tbid:param.id}});
                 var tbdefine = yield getTable(param.id,ColumnCfg);
                 var data = yield dbHelper.findAll(tbdefine,{where:condition});  //查询数据
 
@@ -161,6 +162,10 @@ exports.dbcfg = function(req, res, next) {
                 var data = param.data? JSON.parse(param.data):[];
                 var tbdefine = yield getTable(param.id,ColumnCfg);
                 for (var i = 0; i < data.length; i++) {
+                    //tbdefine.upsert(data[i]).then(function(err){console.log(err)})
+                    for(j in data[i]) {
+                        data[i][j] = data[i][j]+'';
+                    }
                     yield dbHelper.upsert(tbdefine, data[i]);
                 };
                 respone.result = {

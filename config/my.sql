@@ -17,6 +17,7 @@ CREATE TABLE `t_tbcfg` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `dbid` int(11) unsigned NOT NULL,
   `tname` varchar(128) NOT NULL,
+  `title` varchar(128) NOT NULL,
   `createdAt` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
   `updatedAt` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新时间',
   PRIMARY KEY (`id`)
@@ -28,7 +29,7 @@ CREATE TABLE `t_colcfg` (
   `corder` tinyint default 0 NOT NULL,
   `cname` varchar(128) NOT NULL,
   `title` varchar(128) NOT NULL,
-  `type` tinyint default 1 NOT NULL,  /*1: input 2:select 3:textarea  4:checkbox  5:datepicker */
+  `type` tinyint default 1 NOT NULL,  /* 1: input 2:select 3:textarea 4:图片 5:url 6:label 7:checkbox 8:datepicker 9:自增id 10:隐藏 */
   `cfg` text NOT NULL,
   `createdAt` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
   `updatedAt` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新时间',
@@ -67,7 +68,7 @@ CREATE TABLE `t_menu` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(128) NOT NULL,
   `link` varchar(512) NOT NULL,
-  `target` tinyint default 0,
+  `target` char(16) NOT NULL,
   `parentid` int(11) unsigned ,
   `corder` int(11) unsigned ,
   `createdAt` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',

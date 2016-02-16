@@ -22,7 +22,6 @@ class App extends React.Component {
         const { dispatch } = this.props;
         Actions.setId(this.props.params.id);
         dispatch(Actions.getData({condition:this.state.condition}));
-
     }
 
     componentDidUpdate(){
@@ -48,7 +47,7 @@ class App extends React.Component {
     _columns (columns) {
         let arr = [];
         columns.forEach((item,idx) => {
-            arr.push({title:item.title,dataIndex:item.cname})
+            arr.push({title:item.title,dataIndex:item.cname,type:item.type,cfg:item.cfg})
         })
         return arr;
     }

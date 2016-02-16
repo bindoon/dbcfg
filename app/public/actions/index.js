@@ -2,10 +2,16 @@ import * as types from '../constants/index'
 import reqwest from 'reqwest'
 
 let id = 1;
+let condition = {}
 
 export function setId(nid) {
     id=nid;
 }
+
+export function setCondition(ncondition) {
+    condition=ncondition;
+}
+
 
 let apiurl = 'http://127.0.0.1:3333/dbcfg';
 
@@ -91,7 +97,7 @@ export function deleteData(data) {
                         mtype:'success',
                         text:'操作成功'
                     })
-                    dispatch(getData())
+                    dispatch(getData({condition}))
                 }else {
                     dispatch({
                         type:types.SHOW_MSG,
@@ -122,7 +128,7 @@ export function addData(data) {
                         mtype:'success',
                         text:'操作成功'
                     })
-                    dispatch(getData())
+                    dispatch(getData({condition}))
                 }else {
                     dispatch({
                         type:types.SHOW_MSG,
