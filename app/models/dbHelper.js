@@ -36,14 +36,8 @@ var dbHelper = {
             })
         })
     },
-    remove : function(model, conditions) {
-        return new Promise(function(resolve, reject) {
-            model.remove(conditions,function(error) {
-                if (error)
-                    reject(error);
-                resolve();
-            })
-        })
+    remove : function* (model, conditions) {
+        return  yield model.destroy(conditions);
     },
 
     createConnect : function(config) {
@@ -60,7 +54,7 @@ var dbHelper = {
         if(columnArr.length) {
             for(var i =0; i< columnArr.length; i++) {
                 var column = columnArr[i].dataValues;
-                if(column.cname === 'id') {
+                if(column.type == 0) {
                     columns[column.cname] = {
                         type: Sequelize.INTEGER(11).UNSIGNED,
                         allowNull: false,

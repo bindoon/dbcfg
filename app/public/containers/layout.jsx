@@ -1,7 +1,7 @@
 import React,{PropTypes} from 'react'
 import { connect } from 'react-redux'
 
-import { Icon , Col, Row, Menu, Breadcrumb } from '@ali/sui';
+import { Icon , Col, Row, Menu, Breadcrumb } from 'antd';
 const SubMenu = Menu.SubMenu;
 
 import * as Actions from '../actions/index'

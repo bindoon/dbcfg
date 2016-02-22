@@ -8,7 +8,7 @@ import { RouteHandler } from 'react-router'
 import List from '../components/list'
 import * as Actions from '../actions/index'
 
-import {Input,message} from '@ali/sui'
+import {Input,message} from 'antd'
 
 class App extends React.Component {
     constructor() {

@@ -29,7 +29,7 @@ CREATE TABLE `t_colcfg` (
   `corder` tinyint default 0 NOT NULL,
   `cname` varchar(128) NOT NULL,
   `title` varchar(128) NOT NULL,
-  `type` tinyint default 1 NOT NULL,  /* 1: input 2:select 3:textarea 4:图片 5:url 6:label 7:checkbox 8:datepicker 9:自增id 10:隐藏 */
+  `type` tinyint default 1 NOT NULL,  /*0:自增id  1: input 2:select 3:textarea 4:图片 5:url 6:label 7:checkbox 8:datepicker  9:隐藏 */
   `cfg` text NOT NULL,
   `createdAt` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
   `updatedAt` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新时间',

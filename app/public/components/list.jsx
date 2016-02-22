@@ -1,11 +1,13 @@
 'use strict';
 
-var React = require('react');
+import React from 'react';
+import _ from 'lodash';
 
-import {Input,Form, Row, Col,Table,Button,Modal,Select,Checkbox } from '@ali/sui'
+import {Input,Form, Row, Col,Table,Button,Modal,Select,Checkbox,DatePicker } from 'antd';
 const FormItem = Form.Item;
 const confirm = Modal.confirm;
 const Option = Select.Option;
+
 
 class List extends React.Component {
     constructor(props) {
@@ -43,18 +45,25 @@ class List extends React.Component {
         let state = Object.assign({},this.state);
         this.setState(state)
     }
-    listColumns(columns) {
-        var newColumns = Object.assign([],columns);
+    listColumns(columns, type='list') {
+        var newColumns =  _.cloneDeep(columns);
 
         newColumns.forEach((item)=>{
             item.render=(value,record,idx)=>{
-                /* 1: input 2:select 3:textarea 4:图片 5:url 6:label 7:checkbox 8:datepicker 9:自增id 10:隐藏 */
+                /* 0:自增id 1: input 2:select 3:textarea 4:图片 5:url 6:label 7:checkbox 8:datepicker 9:隐藏 */
 
                 let container = <Input value={value} onChange={this.onChange.bind(this,item,record)} ></Input>;
                 switch (item.type) {
                     case 2: //select
                     {
-                        let options = item.cfg? JSON.parse(item.cfg):[];
+                        let options = [];
+                        if(item.cfg) {
+                            try{
+                                options = JSON.parse(item.cfg);
+                            }catch(e) {
+                                options = []
+                            }
+                        }
                         container = <Select value={value} onChange={this.handleSelectChange.bind(this,item,record)} style={{ width: 100 }}>
                             { options.map( (v)=>{
                                 return <Option value={v[0]}>{v[1]}</Option>
@@ -66,12 +75,14 @@ class List extends React.Component {
                         container = <Input type="textarea" value={value} onChange={this.onChange.bind(this,item,record)} />
                         break;
                     case 6:
-                        container = <label>{value}</label>
+                    case 0:
+                        container = type === 'add'? <label>自动值</label>:<label>{value}</label>;
                         break;
                     case 7:
                         container = <Checkbox />
                         break;
                     case 8:
+                        container = <DatePicker defaultValue={value} />
                         break;
 
                 }
@@ -211,7 +222,7 @@ class List extends React.Component {
                 </div>
 
                 {this.state.addShow? (<div>
-                    <Table  rowSelection={addRowSelection} columns={this.listColumns(columns)} dataSource={this.state.newList} pagination={false} bordered striped />
+                    <Table  rowSelection={addRowSelection} columns={this.listColumns(columns,'add')} dataSource={this.state.newList} pagination={false} bordered striped />
                     <div style={{margin:'10px 2px'}}>
                         <Button type="primary" onClick={this.onAdd.bind(this)}>提交</Button>
                         <Button style={{marginLeft:"10px"}}  onClick={this.onCancelAdd.bind(this)}>取消</Button>

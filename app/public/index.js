@@ -1,6 +1,6 @@
 'use strict';
 
-import '@ali/sui/style/index.less'
+import 'antd/style/index.less'
 
 import React from 'react'
 import { render } from 'react-dom'
