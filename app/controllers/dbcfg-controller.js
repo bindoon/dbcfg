@@ -101,6 +101,9 @@ exports.dbcfg = function(req, res, next) {
                 var data = param.data? JSON.parse(param.data):[];
                 var tbdefine = yield getTable(param.id,ColumnCfg);
                 for (var i = 0; i < data.length; i++) {
+                    for(j in data[i]) {
+                        data[i][j] = data[i][j]+'';
+                    }
                     yield dbHelper.insert(tbdefine, opInsert(ColumnCfg,data[i]));
                 };
                 respone.result = {
