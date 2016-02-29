@@ -2,7 +2,6 @@ import React from 'react'
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { RouteHandler } from 'react-router'
 
 
 import List from '../components/list'
