@@ -53,7 +53,7 @@ var dbHelper = {
         var columns = {};
         if(columnArr.length) {
             for(var i =0; i< columnArr.length; i++) {
-                var column = columnArr[i].dataValues;
+                var column = columnArr[i];
                 if(column.type == 0) {
                     columns[column.cname] = {
                         type: Sequelize.INTEGER(11).UNSIGNED,

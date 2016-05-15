@@ -74,7 +74,7 @@ var dbcfgController = {
 
 
     co(function* (){
-        var ColumnCfg = yield dbHelper.findAll(db.ColCfg,{where:{tbid:param.id}});
+        var ColumnCfg = yield dbHelper.findAll(db.ColCfg,{where:{tbid:param.id}, raw: true});
 
         switch(param.op) {
             case 'query':
@@ -84,6 +84,39 @@ var dbcfgController = {
 
                 var tbdefine = yield getTable(param.id,ColumnCfg);
                 var data = yield dbHelper.findAll(tbdefine,{where:condition});  //查询数据
+
+                //关联查询
+                if(ColumnCfg.length) {
+                    for (var i = 0; i < ColumnCfg.length; i++) {
+                        var column = ColumnCfg[i];
+                        if (column.type == 2 && column.cfg) {
+                            try{
+                                var cfg = JSON.parse(column.cfg);
+                                if(typeof cfg.id !== undefined) {
+
+                                    var ColumnCfgSub = yield dbHelper.findAll(db.ColCfg,{where:{tbid:cfg.id+''}});
+                                    var tbdefineSub = yield getTable(cfg.id,ColumnCfgSub);
+                                    var dataSub = yield dbHelper.findAll(tbdefineSub,{raw:true});
+                                    var cfgarr = [];console.log(dataSub)
+                                    if (dataSub.length) {
+                                        for (var j = 0; j < dataSub.length; j++) {
+                                            var subItem = dataSub[j];
+                                            console.log(subItem)
+                                            cfgarr.push([subItem[cfg.key],subItem[cfg.value]]);
+
+                                        }
+                                        column.cfg = JSON.stringify(cfgarr);
+                                        console.log(column.cfg)
+                                    }
+
+                                }
+                            } catch(e) {
+                                console.log(e)
+                            }
+
+                        }
+                    }
+                }
 
                 respone.result = {
                     columns: ColumnCfg,

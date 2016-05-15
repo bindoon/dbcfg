@@ -177,6 +177,12 @@ class List extends React.Component {
             });
         }
     }
+    // 绑定键盘回车事件，添加新任务
+    handlerKeyUp(event){
+        if(event.keyCode === 13){
+            this.onSearch();
+        }
+    }
     render() {
         let {columns,pagination,addNum,rowKey} = this.props;
         let condition = this.state.condition;
@@ -203,7 +209,7 @@ class List extends React.Component {
                     {columns.map((item)=>{
                         return   (<FormItem key={item.dataIndex}
                         label={item.title}>
-                        <Input placeholder="请输入搜索名称" value={condition[item.dataIndex]} onChange={this._searchOnChange.bind(this,item.dataIndex)}/>
+                        <Input placeholder="请输入搜索名称" onKeyUp={this.handlerKeyUp.bind(this)} value={condition[item.dataIndex]} onChange={this._searchOnChange.bind(this,item.dataIndex)}/>
                         </FormItem>)
                     })}
                     </div>
