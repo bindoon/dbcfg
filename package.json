@@ -30,7 +30,7 @@
     "webpack-hot-middleware": "2.0.0"
   },
   "dependencies": {
-    "antd": "^0.12.3",
+    "antd": "~0.12.17",
     "body-parser": "^1.12.4",
     "bson": "^0.4.7",
     "classnames": "^2.2.3",

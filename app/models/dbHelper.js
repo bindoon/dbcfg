@@ -61,6 +61,8 @@ var dbHelper = {
                         primaryKey: true,
                         autoIncrement: true
                     }
+                } else if (column.type == 10) {
+                    continue;
                 } else {
                     columns[column.cname] = {
                         type: Sequelize.STRING,

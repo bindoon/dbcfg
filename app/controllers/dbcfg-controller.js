@@ -5,7 +5,7 @@ var dbHelper = require('../models/dbHelper');
 var jsonprc = require('../biz/jsonprc')
 var db = require('../models');
 var dbStore = require('../biz/dbStore')
-
+var helper = require('../lib/helper');
 
 function* getTable(id,ColumnCfg) {
     ColumnCfg = ColumnCfg || (yield dbHelper.findAll(db.ColCfg,{where:{tbid:id}}));
@@ -57,7 +57,10 @@ function opDelete(columnArr,data) {
     return obj;
 }
 
-exports.dbcfg = function(req, res, next) {
+var dbcfgController = {
+
+
+    dbcfg : function(req, res, next) {
     var param = req.getParams();
 
     if (!param.id||!param.op) {
@@ -156,3 +159,6 @@ exports.dbcfg = function(req, res, next) {
         res.send(ret);
     })
 }
+}
+module.exports = helper.wrapControllerByTryCatch(dbcfgController);
+

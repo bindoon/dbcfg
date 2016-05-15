@@ -8,7 +8,6 @@ const FormItem = Form.Item;
 const confirm = Modal.confirm;
 const Option = Select.Option;
 
-
 class List extends React.Component {
     constructor(props) {
         super(props);
@@ -83,6 +82,13 @@ class List extends React.Component {
                         break;
                     case 8:
                         container = <DatePicker defaultValue={value} />
+                    case 10:
+                    {
+                        if (item.cfg) {
+                            return <div dangerouslySetInnerHTML={{__html:item.cfg}} />
+                        };
+
+                    }
                         break;
 
                 }
