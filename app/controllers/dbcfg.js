@@ -1,6 +1,5 @@
 'strict model';
 
-var co = require('co');
 var dbHelper = require('../models/dbHelper');
 var jsonprc = require('../biz/jsonprc')
 var db = require('../models');
@@ -60,20 +59,18 @@ function opDelete(columnArr,data) {
 var dbcfgController = {
 
 
-    dbcfg : function(req, res, next) {
-    var param = req.getParams();
+    dbcfg : function *(next) {
 
-    if (!param.id||!param.op) {
-        res.send(jsonprc.error('param error'));
-        return;
-    };
+        var param = this.getParams();
+        if (!param.id||!param.op) {
+            this.body = jsonprc.error('param error');
+            return;
+        };
 
-    var respone = {
-        success:true
-    };
+        var respone = {
+            success:true
+        };
 
-
-    co(function* (){
         var ColumnCfg = yield dbHelper.findAll(db.ColCfg,{where:{tbid:param.id}, raw: true});
 
         switch(param.op) {
@@ -125,9 +122,9 @@ var dbcfgController = {
                 }
 
                 if (data.length >= 0) {
-                    return respone;
+                    this.body =  respone;
                 } else {
-                    return jsonprc.error('query error');
+                    this.body = jsonprc.error('query error');
                 }
                 break;
             }
@@ -145,7 +142,7 @@ var dbcfgController = {
                     code: 0,
                     msg: '添加成功'
                 }
-                return respone;
+                this.body = respone;
                 break;
             }
             case 'update':
@@ -163,7 +160,7 @@ var dbcfgController = {
                     code: 0,
                     msg: '更新成功'
                 }
-                return respone;
+                this.body = respone;
                 break;
             }
             case 'delete':
@@ -178,19 +175,11 @@ var dbcfgController = {
                     code: 0,
                     msg: '删除成功'
                 }
-                return respone;
+                this.body = respone;
                 break;
             }
         }
-    }).then(function(ret){
-
-        if (param.callback) {
-            res.send(param.callback+'('+JSON.stringify(ret)+')');
-            return;
-        };
-        res.send(ret);
-    })
-}
+    }
 }
 module.exports = helper.wrapControllerByTryCatch(dbcfgController);
 

@@ -15,9 +15,9 @@ module.exports = {
         let real = {};
 
         _.map(obj, (value, key) => {
-            real[key] = function (req, res, next) {
+            real[key] = function *() {
                 try {
-                    obj[key](req,res,next);
+                    yield obj[key].apply(this);
                 } catch (err) {
                     console.error(err);
                     this.body = {success: false, message: err.message, stack: err.stack};

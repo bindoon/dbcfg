@@ -13,12 +13,12 @@ export function setCondition(ncondition) {
 }
 
 
-let apiurl = 'http://127.0.0.1:3333/dbcfg';
+let apiurl = '/api/dbcfg';
 
 export function getSider() {
     return dispatch => {
         reqwest({
-            url:'/menu',
+            url:'/api/menu',
             type:'json',
             success: function(json) {
                 dispatch({

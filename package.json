@@ -46,7 +46,6 @@
     "lodash": "~4.5.0",
     "mongoose": "^4.0.3",
     "morgan": "^1.5.3",
-    "promise": "^7.0.1",
     "react": "^0.14.0",
     "react-dom": "^0.14.6",
     "react-redux": "^4.0.0",

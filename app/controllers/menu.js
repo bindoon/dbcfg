@@ -1,8 +1,10 @@
-var co = require('co');
+'use strict';
+
 var dbHelper = require('../models/dbHelper');
 var mongoose = require('mongoose');
 var jsonprc = require('../biz/jsonprc')
 var BSON = require('bson').BSONPure;
+var helper = require('../lib/helper');
 
 var util = require('util');
 
@@ -34,18 +36,7 @@ function createTree(list) {
     });
 }
 
-exports.menu = function(req, res, next) {
-    co(function*() {
-        var list = yield dbHelper.findAll(Menu, {});
-        return createTree(list);
-    }).then(function(data) {
-        res.send({
-            result: {
-                list: data
-            }
-        })
-    })
-}
+
 
 function* queryData(usermodel, condition, options) {
     return yield dbHelper.query(usermodel, condition, options);
@@ -78,14 +69,22 @@ function* removeData(usermodel, list) {
     return 0;
 }
 
+var menuController = {
 
-exports.menucfg = function(req, res, next) {
-    var op = req.getParam('op');
-    if (op == 'update') {
-        var list = req.getParam('data');
-        list = list ? JSON.parse(list) : [];
+    menu : function * (next) {
 
-        co(function*() {
+        var list = yield dbHelper.findAll(Menu, {});
+        this.body = {
+            result: {
+                list: createTree(list)
+            }
+        }
+    },
+    menucfg : function * (next) {
+        var op = this.getParam('op');
+        if (op == 'update') {
+            var list = this.getParam('data');
+            list = list ? JSON.parse(list) : [];
 
             for (var i = 0; i < list.length; i++) {
                 if (list[i].action == 'create') {
@@ -104,22 +103,23 @@ exports.menucfg = function(req, res, next) {
                     });
                 }
             };
-        }).then(function() {
-            res.send({
+
+            this.body = {
                 code: 0,
                 message: 'success'
-            })
-        })
-    } else {
-        co(function*() {
+            }
+
+        } else {
             var list = yield dbHelper.findAll(Menu, {});
-            return createTree(list);
-        }).then(function(data) {
-            res.send({
+            this.body = {
                 result: {
-                    list: data
+                    list: createTree(list)
                 }
-            })
-        })
+            } ;
+        }
     }
+
+
 }
+
+module.exports = helper.wrapControllerByTryCatch(menuController);
