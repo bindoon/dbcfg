@@ -97,7 +97,7 @@ var dbcfgController = {
                                     var ColumnCfgSub = yield dbHelper.findAll(db.ColCfg,{where:{tbid:cfg.id+''}});
                                     var tbdefineSub = yield getTable(cfg.id,ColumnCfgSub);
                                     var dataSub = yield dbHelper.findAll(tbdefineSub,{raw:true});
-                                    var cfgarr = [];console.log(dataSub)
+                                    var cfgarr = [];
                                     if (dataSub.length) {
                                         for (var j = 0; j < dataSub.length; j++) {
                                             var subItem = dataSub[j];
@@ -106,7 +106,6 @@ var dbcfgController = {
 
                                         }
                                         column.cfg = JSON.stringify(cfgarr);
-                                        console.log(column.cfg)
                                     }
 
                                 }

@@ -2,6 +2,7 @@ CREATE DATABASE dbcfg;
 
 CREATE TABLE `t_dbcfg` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `title` char(128) NOT NULL,
   `dialect` char(32) default 'mysql',
   `host` char(16) NOT NULL,
   `username` varchar(64) NOT NULL,
@@ -37,8 +38,8 @@ CREATE TABLE `t_colcfg` (
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 -- dbcfg 表配置
-insert into t_dbcfg values(1,1,'127.0.0.1','root','','dbcfg',3306,now(),now());
-insert into t_tbcfg values(1,1,'t_dbcfg',now(),now());
+insert into t_dbcfg values(1,1,'db表','127.0.0.1','root','','dbcfg',3306,now(),now());
+insert into t_tbcfg values(1,1,'t_dbcfg','table of dbcfg',now(),now());
 insert into t_colcfg values(1,1,1,'id','自动',1,'',now(),now());
 insert into t_colcfg values(2,1,2,'type','类别',1,'',now(),now());
 insert into t_colcfg values(3,1,3,'host','host',1,'',now(),now());
@@ -47,13 +48,13 @@ insert into t_colcfg values(5,1,5,'password','password',1,'',now(),now());
 insert into t_colcfg values(6,1,6,'port','port',1,'',now(),now());
 
 -- tablecfg 配置
-insert into t_tbcfg values(2,1,'t_tbcfg',now(),now());
+insert into t_tbcfg values(2,1,'t_tbcfg','table of tbcfg',now(),now());
 insert into t_colcfg values(7,2,1,'id','自动',1,'',now(),now());
 insert into t_colcfg values(8,2,2,'dbid','选择db',1,'',now(),now());
 insert into t_colcfg values(9,2,3,'tname','表名',1,'',now(),now());
 
 -- columncfg 配置
-insert into t_tbcfg values(3,1,'t_colcfg',now(),now());
+insert into t_tbcfg values(3,1,'t_colcfg','table of colcfg',now(),now());
 insert into t_colcfg values(10,3,1,'id','自动',1,'',now(),now());
 insert into t_colcfg values(11,3,2,'tbid','选择table',1,'',now(),now());
 insert into t_colcfg values(12,3,3,'corder','顺序',1,'',now(),now());
