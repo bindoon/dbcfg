@@ -1,5 +1,5 @@
-import * as types from '../constants/index'
-import reqwest from 'reqwest'
+import * as types from '../constants/index';
+import reqwest from 'reqwest';
 
 let id = 1;
 let condition = {}
@@ -17,7 +17,7 @@ let apiurl = '/api/dbcfg';
 
 export function getSider() {
     return dispatch => {
-        reqwest({
+        return reqwest({
             url:'/api/menu',
             type:'json',
             success: function(json) {
@@ -32,7 +32,7 @@ export function getSider() {
 
 export function getData(op={}) {
     return dispatch => {
-        reqwest({
+        return reqwest({
             url:apiurl,
             method:'post',
             data: {
@@ -53,28 +53,13 @@ export function getData(op={}) {
 
 export function updateData(data) {
     return dispatch => {
-        reqwest({
+        return reqwest({
             url:apiurl,
             method:'post',
             data: {
                 op:'update',
                 data:JSON.stringify(data),
                 id: id
-            },
-            success: function(json) {
-                if(json.result.code==0) {
-                    dispatch({
-                        type:types.SHOW_MSG,
-                        mtype:'success',
-                        text:'更新成功'
-                    })
-                }else {
-                    dispatch({
-                        type:types.SHOW_MSG,
-                        mtype:'error',
-                        text:json.result.msg
-                    })
-                }
             }
         })
     }
@@ -82,7 +67,7 @@ export function updateData(data) {
 
 export function deleteData(data) {
     return dispatch => {
-        reqwest({
+        return reqwest({
             url:apiurl,
             method:'post',
             data: {
@@ -92,18 +77,7 @@ export function deleteData(data) {
             },
             success: function(json) {
                 if(json.success) {
-                    dispatch({
-                        type:types.SHOW_MSG,
-                        mtype:'success',
-                        text:'操作成功'
-                    })
                     dispatch(getData({condition}))
-                }else {
-                    dispatch({
-                        type:types.SHOW_MSG,
-                        mtype:'error',
-                        text:json.result.msg
-                    })
                 }
             }
         })
@@ -113,7 +87,7 @@ export function deleteData(data) {
 
 export function addData(data) {
     return dispatch => {
-        reqwest({
+         return reqwest({
             url:apiurl,
             method:'post',
             data: {
@@ -122,19 +96,8 @@ export function addData(data) {
                 id: id
             },
             success: function(json) {
-                if(json.success) {
-                    dispatch({
-                        type:types.SHOW_MSG,
-                        mtype:'success',
-                        text:'操作成功'
-                    })
+                if (json.success) {
                     dispatch(getData({condition}))
-                }else {
-                    dispatch({
-                        type:types.SHOW_MSG,
-                        mtype:'error',
-                        text:json.result.msg
-                    })
                 }
             }
         })

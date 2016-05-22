@@ -2,7 +2,7 @@
 
 import React from 'react';
 import _ from 'lodash';
-
+import Mustache from 'mustache';
 import {Input,Form, Row, Col,Table,Button,Modal,Select,Checkbox,DatePicker } from 'antd';
 const FormItem = Form.Item;
 const confirm = Modal.confirm;
@@ -85,7 +85,8 @@ class List extends React.Component {
                     case 10:
                     {
                         if (item.cfg) {
-                            return <div dangerouslySetInnerHTML={{__html:item.cfg}} />
+                            let cfg = Mustache.render(item.cfg,record);
+                            return <div dangerouslySetInnerHTML={{__html:cfg}} />
                         };
 
                     }

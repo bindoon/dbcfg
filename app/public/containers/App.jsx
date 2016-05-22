@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import List from '../components/list'
 import * as Actions from '../actions/index'
 
-import {Input,message} from 'antd'
+import {Input,notification} from 'antd'
 
 class App extends React.Component {
     constructor() {
@@ -22,12 +22,19 @@ class App extends React.Component {
         Actions.setId(this.props.params.id);
         dispatch(Actions.getData({condition:this.state.condition}));
     }
-
-    componentDidUpdate(){
-        if(this.props.list.msg.mtype) {
-            message.success(this.props.list.msg.text);
+    showMessage(json) {
+        if(json.success) {
+            notification.success({
+                message:json.message
+            })
+        } else {
+            notification.error({
+                message:json.message,
+                description:json.description
+            })
         }
     }
+
     componentWillReceiveProps (next) {
 
         if(next.params.id != this.props.params.id || next.location.query!=this.props.location.query) {
@@ -64,22 +71,22 @@ class App extends React.Component {
     }
     onAdd(data) {
         const { dispatch } = this.props;
-        dispatch(Actions.addData(data));
+        dispatch(Actions.addData(data)).then(json=>this.showMessage(json));
     }
     onUpdate(data) {
         const { dispatch } = this.props;
-        dispatch(Actions.updateData(data));
+        dispatch(Actions.updateData(data)).then(json=>this.showMessage(json));
     }
     onDelete(data) {
         const { dispatch } = this.props;
-        dispatch(Actions.deleteData(data));
+        dispatch(Actions.deleteData(data)).then(json=>this.showMessage(json));
     }
     onSearch(condition) {
         const { dispatch } = this.props;
         dispatch(Actions.getData({condition:Object.assign({},this.state.condition,condition)}));
     }
     render() {
-        let {columns,data, pagination, ...others} = this.props.list.result;
+        let {columns,data, pagination, ...others} = this.props.list;
         return  <List {...others} dataSource={data} columns={this._columns(columns)} rowKey={(record)=>{return record.id}} pagination={this._pagination(pagination)} onAdd={this.onAdd.bind(this)} onUpdate={this.onUpdate.bind(this)} onSearch={this.onSearch.bind(this)} onDelete={this.onDelete.bind(this)}/>
     }
 }

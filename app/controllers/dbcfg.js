@@ -6,30 +6,39 @@ var db = require('../models');
 var dbStore = require('../biz/dbStore')
 var helper = require('../lib/helper');
 
-function* getTable(id,ColumnCfg) {
+function* getTableCfg(id) {
+    var TbCfg = yield dbHelper.findOne(db.TbCfg,{where:{id:id}, raw: true});
+    return TbCfg;
+}
+
+function* getTable(id,ColumnCfg,TbCfg) {
+    //1. 根据url参数id取列信息
     ColumnCfg = ColumnCfg || (yield dbHelper.findAll(db.ColCfg,{where:{tbid:id}}));
-    var TbCfg = yield dbHelper.findOne(db.TbCfg,{where:{id:id}});
+    //2. 取table的配置信息
+    TbCfg = TbCfg || (yield dbHelper.findOne(db.TbCfg,{where:{id:id}, raw: true}));
 
     var dbconnect;
     if(TbCfg.dbid in dbStore.dbStore) {
         dbconnect = dbStore.dbStore[DbCfg.id];
     }
     else {
-        var DbCfg = yield  dbHelper.findOne(db.DbCfg,{where:{id:TbCfg.dbid}});
+        //3. 取db的配置信息
+        var DbCfg = yield  dbHelper.findOne(db.DbCfg,{where:{id:TbCfg.dbid}, raw: true});
 
-        dbconnect = dbHelper.createConnect(DbCfg.dataValues);   //获取db链接
+        dbconnect = dbHelper.createConnect(DbCfg);   //获取db链接
         dbStore.dbStore[DbCfg.id] = dbconnect;
     }
 
+    //4. 连接db
     return dbHelper.createDefine(dbconnect, TbCfg.tname, ColumnCfg) //定义table
 }
 
 // 插入删除自增、label字段
 function opInsert(columnArr,data) {
-    for(var i =0; i< columnArr.length; i++) {
-        var column = columnArr[i].dataValues;
-        /*0:自增id  1: input 2:select 3:textarea 4:图片 5:url 6:label 7:checkbox 8:datepicker  9:隐藏 */
 
+    for(var i =0; i< columnArr.length; i++) {
+        var column = columnArr[i];
+        /*0:自增id  1: input 2:select 3:textarea 4:图片 5:url 6:label 7:checkbox 8:datepicker  9:隐藏 */
         switch (column.type) {
             case 0:
             case 6:
@@ -43,7 +52,7 @@ function opInsert(columnArr,data) {
 function opDelete(columnArr,data) {
     var obj = data;
     for(var i =0; i< columnArr.length; i++) {
-        var column = columnArr[i].dataValues;
+        var column = columnArr[i];
         /*0:自增id  1: input 2:select 3:textarea 4:图片 5:url 6:label 7:checkbox 8:datepicker  9:隐藏 */
 
         switch (column.type) {
@@ -71,7 +80,8 @@ var dbcfgController = {
             success:true
         };
 
-        var ColumnCfg = yield dbHelper.findAll(db.ColCfg,{where:{tbid:param.id}, raw: true});
+        // 列数据
+        var ColumnCfg = yield dbHelper.findAll(db.ColCfg,{where:{tbid:param.id},order:'corder', raw: true});
 
         switch(param.op) {
             case 'query':
@@ -79,8 +89,16 @@ var dbcfgController = {
                 var condition = param.condition? JSON.parse(param.condition):{};
                 var pagination = param.pagination? JSON.parse(param.pagination):{};
 
-                var tbdefine = yield getTable(param.id,ColumnCfg);
-                var data = yield dbHelper.findAll(tbdefine,{where:condition});  //查询数据
+                var TbCfg = yield getTableCfg(param.id);
+                var tbdefine = yield getTable(param.id,ColumnCfg,TbCfg);
+                var option = { where:condition, raw: true};
+
+                console.log(TbCfg);
+
+                if(TbCfg.corder) {
+                    option.order = TbCfg.corder
+                }
+                var data = yield dbHelper.findAll(tbdefine,option);  //查询数据
 
                 //关联查询
                 if(ColumnCfg.length) {
@@ -89,7 +107,7 @@ var dbcfgController = {
                         if (column.type == 2 && column.cfg) {
                             try{
                                 var cfg = JSON.parse(column.cfg);
-                                if(typeof cfg.id !== undefined) {
+                                if(typeof cfg.id !== 'undefined') {
 
                                     var ColumnCfgSub = yield dbHelper.findAll(db.ColCfg,{where:{tbid:cfg.id+''}});
                                     var tbdefineSub = yield getTable(cfg.id,ColumnCfgSub);
@@ -138,11 +156,10 @@ var dbcfgController = {
                     }
                     yield dbHelper.insert(tbdefine, opInsert(ColumnCfg,data[i]));
                 };
-                respone.result = {
-                    code: 0,
-                    msg: '添加成功'
+                this.body = {
+                    success:true,
+                    message: '添加成功'
                 }
-                this.body = respone;
                 break;
             }
             case 'update':
@@ -156,11 +173,10 @@ var dbcfgController = {
                     }
                     yield dbHelper.upsert(tbdefine, data[i]);
                 };
-                respone.result = {
-                    code: 0,
-                    msg: '更新成功'
+                this.body = {
+                    success:true,
+                    message: '更新成功'
                 }
-                this.body = respone;
                 break;
             }
             case 'delete':
@@ -171,11 +187,10 @@ var dbcfgController = {
                     //tbdefine.upsert(data[i]).then(function(err){console.log(err)})
                     yield dbHelper.remove(tbdefine, {where:opDelete(ColumnCfg, data[i]),limit:1});
                 };
-                respone.result = {
-                    code: 0,
-                    msg: '删除成功'
+                this.body = {
+                    success: true,
+                    message: '删除成功'
                 }
-                this.body = respone;
                 break;
             }
         }

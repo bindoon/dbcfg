@@ -2,11 +2,10 @@ import { LIST_GET,SHOW_MSG,CLEAR_MSG } from '../constants/index'
 import { combineReducers } from 'redux'
 
 const initialState = {
-    result : {columns:[],data:[],addNum:3},
-    msg:{}
+     columns:[],data:[],addNum:3
 };
 
-function result(state = initialState.result, action) {
+function list(state = initialState, action) {
     switch (action.type) {
         case LIST_GET:
             return Object.assign({}, state, action.data.result);
@@ -16,28 +15,5 @@ function result(state = initialState.result, action) {
             return state;
     }
 }
-
-function msg(state = initialState.msg, action) {
-    switch (action.type) {
-        case SHOW_MSG:
-            return {
-                mtype:action.mtype,
-                text:action.text
-            }
-            break;
-        case  CLEAR_MSG: {
-            return {
-
-            }
-        }
-        default:
-            return state;
-    }
-}
-
-const list = combineReducers({
-    result,
-    msg,
-})
 
 export default list;

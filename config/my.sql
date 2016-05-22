@@ -19,6 +19,7 @@ CREATE TABLE `t_tbcfg` (
   `dbid` int(11) unsigned NOT NULL,
   `tname` varchar(128) NOT NULL,
   `title` varchar(128) NOT NULL,
+  `corder` varchar(128) NOT NULL,
   `createdAt` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
   `updatedAt` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '更新时间',
   PRIMARY KEY (`id`)

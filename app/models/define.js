@@ -50,6 +50,10 @@ module.exports = function (sequelize) {
         tname: {
             type: Sequelize.STRING,
             allowNull: false
+        },
+        corder: {
+            type: Sequelize.STRING,
+            allowNull: false
         }
     });
 
@@ -61,6 +65,10 @@ module.exports = function (sequelize) {
             autoIncrement: true
         },
         tbid: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        corder: {
             type: Sequelize.STRING,
             allowNull: false
         },
