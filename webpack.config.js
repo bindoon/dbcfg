@@ -8,7 +8,7 @@ module.exports = {
         './app/public/index'
     ],
     output: {
-        path: path.join(__dirname, 'dist'),
+        path: path.join(__dirname, 'app/views'),
         filename: 'bundle.js',
         publicPath: '/static/'
     },
@@ -55,5 +55,12 @@ module.exports = {
                 loader: 'style!css'
             }
         ]
+    },
+    externals: {
+        'react': 'window.React',
+        'react-dom': 'window.ReactDOM',
+        'react-redux': 'window.ReactRedux',
+        'react-router': 'window.ReactRouter',
+        'redux': 'window.Redux',
     }
 }

@@ -7,7 +7,8 @@ var webpackConfig = require("./webpack.config.js");
 gulp.task("build", function(callback) {
 
     var myConfig = Object.create(webpackConfig);
-    myConfig.entry = ['./app/public/index']
+    myConfig.entry = ['./app/public/index'];
+    myConfig.devtool = false;
 
     myConfig.plugins = [].concat(
         new webpack.DefinePlugin({

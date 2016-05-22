@@ -1,6 +1,6 @@
 {{extend ("./layout/default-layout") }}
 
 {{#block ("content") }}
-
-<script type="text/javascript" src="http://localhost:8081/static/bundle.js"></script>
+<script src="http://g.alicdn.com/alife/lib/0.0.2??react/0.14.7/react.min.js,react-dom/0.14.7/react-dom.min.js,react-redux/4.4.0/react-redux.min.js,react-router/1.0.3/ReactRouter.min.js,redux/3.5.1/redux.min.js"></script>
+<script type="text/javascript" src="{{static}}"></script>
 {{/block}}

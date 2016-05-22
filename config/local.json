@@ -8,7 +8,8 @@
         "USERNAME": "",
         "PASSWORD": "",
         "uploaddir" : "/root/www/imagesupload",
-                "env":"local"
+      "static":"http://localhost:8081/static/bundle.js",
+        "env":"local"
 
     },
     "logger" : {
