@@ -1,4 +1,4 @@
-import { LIST_GET,SHOW_MSG } from '../constants/index'
+import { LIST_GET,SHOW_MSG,CLEAR_MSG } from '../constants/index'
 import { combineReducers } from 'redux'
 
 const initialState = {
@@ -25,7 +25,11 @@ function msg(state = initialState.msg, action) {
                 text:action.text
             }
             break;
+        case  CLEAR_MSG: {
+            return {
 
+            }
+        }
         default:
             return state;
     }

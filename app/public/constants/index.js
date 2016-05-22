@@ -6,4 +6,5 @@ export default keyMirror({
     LIST_GET: null,
     LIST_ADD: null,
     SHOW_MSG:null,
+    CLEAR_MSG:null,
 })
