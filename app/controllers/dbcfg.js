@@ -93,8 +93,6 @@ var dbcfgController = {
                 var tbdefine = yield getTable(param.id,ColumnCfg,TbCfg);
                 var option = { where:condition, raw: true};
 
-                console.log(TbCfg);
-
                 if(TbCfg.corder) {
                     option.order = TbCfg.corder
                 }

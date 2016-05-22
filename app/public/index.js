@@ -10,26 +10,12 @@ import configureStore from './store/configureStore'
 
 const store = configureStore()
 
-function renderDevTools(store) {
-    if (__DEBUG__) {
-        let {DevTools, DebugPanel, LogMonitor} = require('redux-devtools/lib/react')
-
-        return (
-            <DebugPanel top right bottom>
-                <DevTools store={store} monitor={LogMonitor} />
-            </DebugPanel>
-        )
-    }
-    return null
-}
 
 render(
     <div>
         <Provider store={store}>
             <ReduxRouter />
         </Provider>
-        {renderDevTools(store)}
-
     </div>        ,
   document.getElementById('container')
 )
