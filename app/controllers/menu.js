@@ -1,7 +1,6 @@
 'use strict';
 
 var dbHelper = require('../models/dbHelper');
-var mongoose = require('mongoose');
 var jsonprc = require('../biz/jsonprc')
 var BSON = require('bson').BSONPure;
 var helper = require('../lib/helper');
