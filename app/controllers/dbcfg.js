@@ -114,7 +114,6 @@ var dbcfgController = {
                                     if (dataSub.length) {
                                         for (var j = 0; j < dataSub.length; j++) {
                                             var subItem = dataSub[j];
-                                            console.log(subItem)
                                             cfgarr.push([subItem[cfg.key],subItem[cfg.value]]);
 
                                         }

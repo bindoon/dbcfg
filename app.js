@@ -13,7 +13,8 @@ var app = require('koa')()
 var extend = require('util')._extend;
 
 global.db = require('./app/models');
-
+global.config = require('config');
+console.log(config)
 const routers = require('./app/routers');
 
 //xtemplate模板渲染
@@ -48,7 +49,7 @@ app.use(function *(next){
 });
 
 
-app.use(require('koa-static')(__dirname + 'app/public'));
+app.use(require('koa-static')(__dirname + '/app/public'));
 
 // // routes definition
 koa.use('', routers.routes(), routers.allowedMethods());

@@ -8,7 +8,6 @@
         "PASSWORD": "",
       "static":"/bundle.js",
       "env":"production"
-
     },
     "logger" : {
         "stderr"      : false,

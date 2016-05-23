@@ -8,7 +8,7 @@ module.exports = {
         './app/public/index'
     ],
     output: {
-        path: path.join(__dirname, 'app/views'),
+        path: path.join(__dirname, 'app/public'),
         filename: 'bundle.js',
         publicPath: '/static/'
     },
@@ -30,19 +30,9 @@ module.exports = {
                 test: /\.(js|jsx)$/,
                 loader: 'babel',
                 query: {
-                    plugins: ['react-transform'],
-                    extra: {
-                        'react-transform': {
-                            transforms: [{
-                                transform: 'react-transform-hmr',
-                                imports: ['react'],
-                                locals: ['module']
-                            }, {
-                                transform: 'react-transform-catch-errors',
-                                imports: ['react', 'redbox-react']
-                            }]
-                        }
-                    }
+                    cacheDirectory: true,
+                    presets: ['es2015', 'react', 'stage-0'],
+                    plugins: ['add-module-exports'] //解决 export default的问题，多一个  module.exports = exports['default'];
                 },
                 exclude: /node_modules/,
                 include: path.join(__dirname, 'app', 'public')
