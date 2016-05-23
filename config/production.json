@@ -1,13 +1,10 @@
 {
     "global": {
-        "JAVA_PORT" : "7001",
-        "assetserver":"",
-        "URL": "mongodb://127.0.0.1:27017/hanstyle",
-        "COOKIE_SECRET" : "hanstyle",
-        "USERNAME": "",
-        "PASSWORD": "",
-      "static":"/bundle.js",
-      "env":"production"
+        "DATABASE": "dbcfg",
+        "USERNAME": "root",
+        "PASSWORD": "whoami@1234",
+        "static":"/bundle.js",
+        "env":"production"
     },
     "logger" : {
         "stderr"      : false,
