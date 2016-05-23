@@ -2,7 +2,7 @@
     "global": {
         "DATABASE": "dbcfg",
         "USERNAME": "root",
-        "PASSWORD": "whoami@1234",
+        "PASSWORD": "",
         "static":"/bundle.js",
         "env":"production"
     },
