@@ -8,25 +8,12 @@ import routes from '../routes';
 
 
 
-var buildStore
-
-if (__DEBUG__) {
-    buildStore = compose(
-        applyMiddleware(thunk),
-        reduxReactRouter({
-            routes,
-            createHistory
-        }),
-        require('redux-devtools').devTools(),
-        require('redux-devtools').persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
-    )(createStore)
-} else {
-    buildStore = compose(applyMiddleware(thunk),
+var buildStore = compose(applyMiddleware(thunk),
         reduxReactRouter({
             routes,
             createHistory
         }))(createStore)
-}
+
 
 
 export default function configureStore(initialState) {
