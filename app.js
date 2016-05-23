@@ -14,7 +14,6 @@ var extend = require('util')._extend;
 
 global.db = require('./app/models');
 global.config = require('config');
-console.log(config)
 const routers = require('./app/routers');
 
 //xtemplate模板渲染
