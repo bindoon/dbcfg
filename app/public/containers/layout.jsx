@@ -1,7 +1,7 @@
 import React,{PropTypes} from 'react'
 import { connect } from 'react-redux'
 
-import { Icon , Col, Row, Menu, Breadcrumb } from 'antd';
+import { Icon , Col, Row, Menu, Breadcrumb, notification } from 'antd';
 const SubMenu = Menu.SubMenu;
 
 import * as Actions from '../actions/index'
@@ -15,7 +15,19 @@ class Sider extends React.Component {
     }
     componentDidMount() {
         const { dispatch } = this.props;
-        dispatch(Actions.getSider());
+        dispatch(Actions.getSider()).then(json=>this.showMessage(json));;
+    }
+    showMessage(json) {
+        if(json.success) {
+            notification.success({
+                message:json.message
+            })
+        } else {
+            notification.error({
+                message:json.message,
+                description:json.description
+            })
+        }
     }
     handleClick(e) {
         console.log('click ', e);

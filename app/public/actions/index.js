@@ -21,10 +21,12 @@ export function getSider() {
             url:'/api/menu',
             type:'json',
             success: function(json) {
-                dispatch({
-                    type:types.SIDER_GET,
-                    data:json
-                })
+                if (json.success) {
+                    dispatch({
+                        type:types.SIDER_GET,
+                        data:json
+                    })
+                };
             }
         })
     }
