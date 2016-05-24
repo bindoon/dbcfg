@@ -74,6 +74,7 @@ var menuController = {
 
         var list = yield dbHelper.findAll(Menu, {});
         this.body = {
+            success:true,
             result: {
                 list: createTree(list)
             }

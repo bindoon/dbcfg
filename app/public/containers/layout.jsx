@@ -15,19 +15,13 @@ class Sider extends React.Component {
     }
     componentDidMount() {
         const { dispatch } = this.props;
-        dispatch(Actions.getSider()).then(json=>this.showMessage(json));;
-    }
-    showMessage(json) {
-        if(json.success) {
-            notification.success({
-                message:json.message
-            })
-        } else {
-            notification.error({
-                message:json.message,
-                description:json.description
-            })
-        }
+        dispatch(Actions.getSider()).then(json=>{
+            if(!json.success) {
+                notification.error({
+                    message:json.message
+                })
+            }
+        });;
     }
     handleClick(e) {
         console.log('click ', e);

@@ -20,17 +20,16 @@ class App extends React.Component {
     componentDidMount() {
         const { dispatch } = this.props;
         Actions.setId(this.props.params.id);
-        dispatch(Actions.getData({condition:this.state.condition})).then(json=>this.showMessage(json));;
+        dispatch(Actions.getData({condition:this.state.condition})).then(json=>this.showMessage(json, false));;
     }
-    showMessage(json) {
-        if(json.success) {
-            notification.success({
+    showMessage(json, showsucc=true) {
+        if(json.success ) {
+            showsucc && notification.success({
                 message:json.message
             })
         } else {
             notification.error({
-                message:json.message,
-                description:json.description
+                message:json.message
             })
         }
     }

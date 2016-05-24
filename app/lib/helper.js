@@ -20,7 +20,7 @@ module.exports = {
                     yield obj[key].apply(this);
                 } catch (err) {
                     console.error(err);
-                    this.body = {success: false, message: err.message, stack: err.stack};
+                    this.body = {success: false, message: err.message};
                 }
             };
         });

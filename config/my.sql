@@ -1,4 +1,5 @@
 CREATE DATABASE dbcfg;
+use dbcfg;
 
 CREATE TABLE `t_dbcfg` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
