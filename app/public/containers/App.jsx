@@ -20,7 +20,7 @@ class App extends React.Component {
     componentDidMount() {
         const { dispatch } = this.props;
         Actions.setId(this.props.params.id);
-        dispatch(Actions.getData({condition:this.state.condition}));
+        dispatch(Actions.getData({condition:this.state.condition})).then(json=>this.showMessage(json));;
     }
     showMessage(json) {
         if(json.success) {
@@ -47,7 +47,7 @@ class App extends React.Component {
                     condition:next.location.query
                 })
             }
-            dispatch(Actions.getData({condition:next.location.query}));
+            dispatch(Actions.getData({condition:next.location.query})).then(json=>this.showMessage(json));;
         }
     }
     _columns (columns) {
