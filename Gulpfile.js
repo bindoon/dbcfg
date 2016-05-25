@@ -1,4 +1,6 @@
 var gulp = require("gulp");
+var cleanCSS = require('gulp-clean-css');
+var less = require('gulp-less');
 var webpack = require("webpack");
 var WebpackDevServer = require("webpack-dev-server");
 var webpackConfig = require("./webpack.config.js");
@@ -49,3 +51,10 @@ gulp.task("start", function(callback) {
             console.log("[webpack-dev-server]", "http://127.0.0.1:" + port + "/static/bundle.js");
     });
 });
+
+gulp.task('less', function(){
+    gulp.src('node_modules/antd/style/index.less')
+    .pipe(less())
+    .pipe(cleanCSS())
+    .pipe(gulp.dest('./app/public'));
+})
