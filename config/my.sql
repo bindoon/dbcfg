@@ -1,5 +1,5 @@
 CREATE DATABASE dbcfg;
-use dbcfg;
+USE dbcfg;
 
 CREATE TABLE `t_dbcfg` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -26,7 +26,7 @@ CREATE TABLE `t_tbcfg` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
- --0:自增id  1: input 2:select 3:textarea 4:图片 5:url 6:label 7:checkbox 8:datepicker  9:隐藏 -- */
+/*-- 0:自增id  1: input 2:select 3:textarea 4:图片 5:url 6:label 7:checkbox 8:datepicker  9:隐藏 --*/
 CREATE TABLE `t_colcfg` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `tbid` int(11) unsigned NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE `t_colcfg` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
--- dbcfg 表配置
+/*-- dbcfg 表配置 */
 insert into t_dbcfg values(1,'db表','mysql','127.0.0.1','root','',3306,'dbcfg',now(),now());
 insert into t_tbcfg values(1,1,'t_dbcfg','table of dbcfg','', now(),now());
 insert into t_colcfg values(1,1,1,'id','自动',0,'',now(),now());
@@ -52,7 +52,7 @@ insert into t_colcfg values(6,1,6,'port','port',1,'',now(),now());
 insert into t_colcfg values(7,1,1,'title','标题',1,'',now(),now());
 insert into t_colcfg values(8,1,7,'','操作',10,'<a href="#/list/2?dbid={{id}}">table配置</a>',now(),now());
 
--- tablecfg 配置
+/*-- tablecfg 配置 */
 insert into t_tbcfg values(2,1,'t_tbcfg','table of tbcfg','id', now(),now());
 insert into t_colcfg values(9,2,1,'id','自动',0,'',now(),now());
 insert into t_colcfg values(10,2,2,'dbid','选择db',2,'{"id":1,"key":"id","value":"id"}',now(),now());
@@ -61,7 +61,7 @@ insert into t_colcfg values(12,2,4,'corder','数据排序方式',1,'',now(),now(
 insert into t_colcfg values(13,2,5,'title','描述',1,'',now(),now());
 insert into t_colcfg values(14,2,6,'','操作',10,'<a href="#/list/3?tbid={{id}}">table字段配置</a> | <a href="#/list/{{id}}">数据配置</a>',now(),now());
 
--- columncfg 配置
+/*-- columncfg 配置 */
 insert into t_tbcfg values(3,1,'t_colcfg','table of colcfg','corder', now(),now());
 insert into t_colcfg values(15,3,1,'id','自动',0,'',now(),now());
 insert into t_colcfg values(16,3,2,'tbid','选择table',1,'',now(),now());
@@ -93,4 +93,6 @@ insert into t_colcfg values(25,4,4,'target','打开方式',2,'[["_self","本窗�
 insert into t_colcfg values(26,4,4,'parentid','父节点id',1,'',now(),now());
 insert into t_colcfg values(27,4,5,'corder','排序',1,'',now(),now());
 
-insert into t_menu values(1,'菜单','#/list/3',0,0 ,1,now(),now());
+insert into t_menu values(1,'系统配置','','_self',0 ,1,now(),now());
+insert into t_menu values(2,'table配置','#/list/2','_self',0 ,2,now(),now());
+insert into t_menu values(3,'系统配置','#/list/3','_self',0 ,3,now(),now());
