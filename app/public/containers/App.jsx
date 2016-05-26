@@ -23,8 +23,8 @@ class App extends React.Component {
         dispatch(Actions.getData({condition:this.state.condition})).then(json=>this.showMessage(json, false));;
     }
     showMessage(json, showsucc=true) {
-        if(json.success && json.message ) {
-            showsucc && notification.success({
+        if(json.success ) {
+            showsucc && json.message && notification.success({
                 message:json.message
             })
         } else {

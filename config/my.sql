@@ -85,4 +85,12 @@ CREATE TABLE `t_menu` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
+insert into t_tbcfg values(4,1,'t_menu','table of menu','corder', now(),now());
+insert into t_colcfg values(22,4,1,'id','自动',0,'',now(),now());
+insert into t_colcfg values(23,4,2,'title','标题',1,'',now(),now());
+insert into t_colcfg values(24,4,3,'link','链接',1,'',now(),now());
+insert into t_colcfg values(25,4,4,'target','打开方式',2,'[["_self","本窗口"],["_blank","新窗口"]]',now(),now());
+insert into t_colcfg values(26,4,4,'parentid','父节点id',1,'',now(),now());
+insert into t_colcfg values(27,4,5,'corder','排序',1,'',now(),now());
+
 insert into t_menu values(1,'菜单','#/list/3',0,0 ,1,now(),now());
