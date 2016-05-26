@@ -53,8 +53,8 @@ gulp.task("start", function(callback) {
 });
 
 gulp.task('less', function(){
-    gulp.src('node_modules/antd/style/index.less')
+    gulp.src('./node_modules/antd/style/index.less')
     .pipe(less())
     .pipe(cleanCSS())
-    .pipe(gulp.dest('./app/public'));
+    .pipe(gulp.dest('./app/public/'));
 })
