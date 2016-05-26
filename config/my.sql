@@ -55,7 +55,7 @@ insert into t_colcfg values(8,1,7,'','操作',10,'<a href="#/list/2?dbid={{id}}"
 -- tablecfg 配置
 insert into t_tbcfg values(2,1,'t_tbcfg','table of tbcfg','id', now(),now());
 insert into t_colcfg values(9,2,1,'id','自动',0,'',now(),now());
-insert into t_colcfg values(10,2,2,'dbid','选择db',1,'{"id":1,"key":"id","value":"id"}',now(),now());
+insert into t_colcfg values(10,2,2,'dbid','选择db',2,'{"id":1,"key":"id","value":"id"}',now(),now());
 insert into t_colcfg values(11,2,3,'tname','表名',1,'',now(),now());
 insert into t_colcfg values(12,2,4,'corder','数据排序方式',1,'',now(),now());
 insert into t_colcfg values(13,2,5,'title','描述',1,'',now(),now());

@@ -23,7 +23,7 @@ class App extends React.Component {
         dispatch(Actions.getData({condition:this.state.condition})).then(json=>this.showMessage(json, false));;
     }
     showMessage(json, showsucc=true) {
-        if(json.success ) {
+        if(json.success && json.message ) {
             showsucc && notification.success({
                 message:json.message
             })
@@ -46,7 +46,7 @@ class App extends React.Component {
                     condition:next.location.query
                 })
             }
-            dispatch(Actions.getData({condition:next.location.query})).then(json=>this.showMessage(json));;
+            dispatch(Actions.getData({condition:next.location.query})).then(json=>this.showMessage(json,false));;
         }
     }
     _columns (columns) {
