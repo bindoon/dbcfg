@@ -52,7 +52,8 @@ class App extends React.Component {
     _columns (columns) {
         let arr = [];
         columns.forEach((item,idx) => {
-            arr.push({title:item.title,dataIndex:item.cname,type:item.type,cfg:item.cfg})
+            let span = <span dangerouslySetInnerHTML={{__html:item.title}} />;
+            arr.push({title:span,dataIndex:item.cname,type:item.type,cfg:item.cfg})
         })
         return arr;
     }

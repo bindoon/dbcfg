@@ -89,6 +89,7 @@ var dbcfgController = {
                 var condition = param.condition? JSON.parse(param.condition):{};
                 var pagination = param.pagination? JSON.parse(param.pagination):{};
 
+                // 取table配置信息
                 var TbCfg = yield getTableCfg(param.id);
                 var tbdefine = yield getTable(param.id,ColumnCfg,TbCfg);
                 var option = { where:condition, raw: true};
@@ -168,6 +169,8 @@ var dbcfgController = {
                     for(j in data[i]) {
                         data[i][j] = data[i][j]+'';
                     }
+                    // 这里有primary key 才可以upsert
+                    //TODO 后续要支持主键设置，这里用update条件查询更新
                     yield dbHelper.upsert(tbdefine, data[i]);
                 };
                 this.body = {

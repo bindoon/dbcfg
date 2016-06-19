@@ -49,6 +49,7 @@ insert into t_colcfg values(3,1,3,'host','host',1,'',now(),now());
 insert into t_colcfg values(4,1,4,'username','username',1,'',now(),now());
 insert into t_colcfg values(5,1,5,'password','password',1,'',now(),now());
 insert into t_colcfg values(6,1,6,'port','port',1,'',now(),now());
+insert into t_colcfg values(22,1,6,'dbname','数据库名称',1,'',now(),now());
 insert into t_colcfg values(7,1,1,'title','标题',1,'',now(),now());
 insert into t_colcfg values(8,1,7,'','操作',10,'<a href="#/list/2?dbid={{id}}">table配置</a>',now(),now());
 
